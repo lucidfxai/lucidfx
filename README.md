@@ -3,7 +3,9 @@
 Target market:
     - Your average classic footage enthusiast who wants to see buddy rich in 4k!
     - Maybe they have a niche they are also interested in!
-    - They want to contribute to the body of upscaled content! 
+    - They want to contribute to the body of upscaled content!
+    
+Competitors: https://www.media.io/
 
 Target market: people without specialist machine learning hardware who are interested
 in photo/video AI enhancement and misc AI tools.
