@@ -21,8 +21,9 @@ algorithms. Only pay for what you use!
 Stack:
 ------
 T3 full stack- Deployed to railway
-Backend: Use ML as a service providers - Deployed to replicate
+Backend: Use ML as a service providers - Deployed to replicate?
 Cloud Storage on GCP
+Auth: Auth0
 Postgres database on GCP
 Domain name hosted on GCP
 CI: GitHub Actions
