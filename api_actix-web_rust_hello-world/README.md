@@ -1,3 +1,5 @@
+https://crates.io/crates/bacon
+
 # Hello World API: Actix Web + Rust Sample
 
 This sample uses [actix-web-httpauth][actix-web-httpauth] and [jsonwebtoken][jsonwebtoken] to implement the following security tasks:

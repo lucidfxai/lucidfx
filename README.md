@@ -1,5 +1,19 @@
 # lucidfx
+https://www.banana.dev/docs/how-to-serve-anything
+https://docs.banana.dev/banana-docs/core-concepts/sdks/rest-api
 
+
+Concept:
+--------
+- Reach out to viral video owners.
+- 4K 60fps their content so they now have same video but in 4K60FPS.
+- In exchange for an affiliate link so they get a very generous 25% of all profits
+    from the video.
+- Minimal effort on behalf of the video owner.
+- Free money glitch for viral video owner.
+
+
+----------------------------------------------
 Target market:
     - Your average classic footage enthusiast who wants to see buddy rich in 4k!
     - Maybe they have a niche they are also interested in!
