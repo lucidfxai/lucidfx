@@ -1,8 +1,20 @@
-Deploy ML model to banana.dev
   - Docker gpu instance.
   - set up api call to call the model to upscale video.
-  - Json parameters here will a url to the video to be upscaled.
   - ML model should upscale the video and return a url to the upscaled video.
-  
 
 FE should have a payment structure to be able to pay for the service.
+
+
+To Do:
+------
+- Build docker GPU image that can upscale videos. - Test with docker exec
+- Configure GCP for this docker container.
+  - Likely will involve GKE autoscaler.
+- Configure 2 cloud storage buckets for pre/post upscaled vid.
+- Enable user to upload video to pre storage bucket.
+- Execute upscale for video from storage bucket.
+- Enable user to download upscaled video.
+- Implement payment processor.
+- Implement core business logic.
+
+
