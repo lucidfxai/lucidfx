@@ -1,0 +1,3 @@
+[submodule "mmagic"]
+	path = mmagic
+	url = ./mmagic
