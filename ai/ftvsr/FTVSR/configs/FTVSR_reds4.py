@@ -76,8 +76,8 @@ data = dict(
     # test
     test=dict(
         type=val_dataset_type,
-        lq_folder=dataset_root+'train/train_sharp_bicubic/X4_start1',
-        gt_folder=dataset_root+'train/train_sharp_start1',
+        lq_folder=dataset_root+'',
+        gt_folder=dataset_root+'',
         num_input_frames=100,
         pipeline=test_pipeline,
         scale=4,
