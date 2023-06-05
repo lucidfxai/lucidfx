@@ -1,7 +1,4 @@
 # lucidfx
-https://www.banana.dev/docs/how-to-serve-anything
-https://docs.banana.dev/banana-docs/core-concepts/sdks/rest-api
-
 
 Concept:
 --------
@@ -34,20 +31,15 @@ algorithms. Only pay for what you use!
 
 Stack:
 ------
-T3 full stack- Deployed to railway
-Backend: Use ML as a service providers - Deployed to replicate?
-Cloud Storage on GCP
-Auth: Auth0
-Postgres database on GCP
-Domain name hosted on GCP
-CI: GitHub Actions
+Django
+Huggingface
+React
 
 Key challenges:
 ---------------
-Upload AI models to replicate.
 Give access to AI models on payg and have a monthly membership discount.
-Ship app to iOS, Android, Browser.
 
+Other product ideas:
 - Dewatermark photo (charge per photo)
 - Dewatermark vid (charge per photo)
 - tranformer based photo upscale (charge by photo)
@@ -58,7 +50,6 @@ Ship app to iOS, Android, Browser.
 
 Give AI photo/video editing tools that require state of the art AI to build
 and make it accessible to anyone.
-
 
 Eventually:
 -----------
