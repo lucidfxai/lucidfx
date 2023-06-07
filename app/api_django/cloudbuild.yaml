@@ -12,7 +12,7 @@
    args:
    - 'run'
    - 'deploy'
-   - 'api_django'
+   - 'api-django'
    - '--image'
    - 'gcr.io/$PROJECT_ID/api-django:$COMMIT_SHA'
    - '--region'
