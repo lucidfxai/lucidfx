@@ -15,6 +15,6 @@
    - '--image'
    - 'gcr.io/$PROJECT_ID/api_django:$COMMIT_SHA'
    - '--region'
-   - 'europe-west1'
+   - 'global'
  images:
  - 'gcr.io/$PROJECT_ID/api_django:$COMMIT_SHA'
