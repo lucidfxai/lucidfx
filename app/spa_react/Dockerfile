@@ -1,29 +1,16 @@
-# ---- Base Node ----
-FROM node:18-alpine AS base
-WORKDIR /app
+# Stage 1 - the build process
+FROM node:18-alpine as build-deps
+WORKDIR /usr/src/app
 COPY package*.json ./
-
-# ---- Dependencies ----
-FROM base AS dependencies
-RUN npm ci
-
-# ---- Copy Files/Build ----
-FROM dependencies AS build
-WORKDIR /app
-COPY . /app
+RUN npm ci --only=production
+COPY . ./
 RUN npm run build
 
-# --- Release with Nginx ----
-FROM nginx:1.21-alpine
-
-COPY --from=build /app/build /usr/share/nginx/html
-COPY nginx/nginx.conf.template /etc/nginx/conf.d/default.conf.template
-
-# Add bash
-RUN apk add --no-cache bash
-
-# Substitute variable references in the Nginx configuration for real values from the environment
-CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
-
+# Stage 2 - the production environment
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=build-deps /usr/src/app/build /app
+RUN npm install -g serve
+CMD serve -s -l $PORT
 EXPOSE 8080
 
