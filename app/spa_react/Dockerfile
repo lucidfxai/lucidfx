@@ -5,7 +5,7 @@ COPY package*.json ./
 
 # ---- Dependencies ----
 FROM base AS dependencies
-RUN npm ci 
+RUN npm ci
 
 # ---- Copy Files/Build ----
 FROM dependencies AS build
@@ -21,9 +21,7 @@ COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 # Add bash
 RUN apk add --no-cache bash
 
-# Substitute variable references in the Nginx configuration for real values from the environment
-CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf > /etc/nginx/conf.d/default.conf.temp" && nginx -c /etc/nginx/conf.d/default.conf.temp -g 'daemon off;'
-
-
 EXPOSE 8080
 
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
