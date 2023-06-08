@@ -15,13 +15,15 @@ RUN npm run build
 
 # --- Release with Nginx ----
 FROM nginx:1.21-alpine
+
 COPY --from=build /app/build /usr/share/nginx/html
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf.template /etc/nginx/conf.d/default.conf.template
 
 # Add bash
 RUN apk add --no-cache bash
 
+# Substitute variable references in the Nginx configuration for real values from the environment
+CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+
 EXPOSE 8080
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
