@@ -13,4 +13,3 @@ COPY --from=build-deps /usr/src/app/build /app
 RUN npm install -g serve
 CMD serve -s -l $PORT
 EXPOSE 8080
-
