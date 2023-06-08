@@ -11,6 +11,6 @@ FROM node:18-alpine
 WORKDIR /app
 COPY --from=build-deps /usr/src/app/build /app
 RUN npm install -g serve
-CMD serve -s -l $PORT
+CMD serve -s -l tcp://0.0.0.0:$PORT
 EXPOSE 8080
 
