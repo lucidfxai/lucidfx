@@ -255,5 +255,3 @@ $RECYCLE.BIN/
 venv/*
 *.pyc
 *.sqlite3
-
-venv

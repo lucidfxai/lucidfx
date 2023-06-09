@@ -163,7 +163,7 @@ Status: 200 OK
   "text": "This is a public message.",
   "metadata" : {
     "api": "api_django_python_hello-world",
-    "branch": "basic-role-based-access-control"
+    "branch": "basic-authorization"
   }
 }
 ```
@@ -187,7 +187,7 @@ Status: 200 OK
   "text": "This is a protected message.",
   "metadata" : {
     "api": "api_django_python_hello-world",
-    "branch": "basic-role-based-access-control"
+    "branch": "basic-authorization"
   }
 }
 ```
@@ -211,7 +211,7 @@ Status: 200 OK
   "text": "This is an admin message.",
   "metadata" : {
     "api": "api_django_python_hello-world",
-    "branch": "basic-role-based-access-control"
+    "branch": "basic-authorization"
   }
 }
 ```
@@ -284,19 +284,6 @@ curl localhost:6060/api/messages/admin --header "authorization: Bearer asdf123"
 }
 ```
 HTTP Status: `401`
-
-**Token without required permissions**
-```bash
-curl localhost:6060/api/messages/admin --header "authorization: Bearer <token_without_permissions>"
-```
-```json
-{
-  "error":"insufficient_permissions",
-  "error_description":"You do not have permission to perform this action.",
-  "message":"Permission denied"
-}
-```
-HTTP Status: `403`
 
 ### 500s errors
 
