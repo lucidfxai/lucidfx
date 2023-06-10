@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { PageLoader } from "./components/page-loader";
 import { AuthenticationGuard } from "./components/authentication-guard";
 import { Route, Routes } from "react-router-dom";
@@ -13,6 +13,14 @@ import { PublicPage } from "./pages/public-page";
 
 export const App: React.FC = () => {
   const { isLoading } = useAuth0();
+
+  useEffect(() => {
+    console.log('REACT_APP_AUTH0_DOMAIN:', process.env.REACT_APP_AUTH0_DOMAIN);
+    console.log('REACT_APP_AUTH0_CLIENT_ID:', process.env.REACT_APP_AUTH0_CLIENT_ID);
+    console.log('REACT_APP_AUTH0_CALLBACK_URL:', process.env.REACT_APP_AUTH0_CALLBACK_URL);
+    console.log('REACT_APP_AUTH0_AUDIENCE:', process.env.REACT_APP_AUTH0_AUDIENCE);
+    console.log('REACT_APP_API_SERVER_URL:', process.env.REACT_APP_API_SERVER_URL);
+  }, []);
 
   if (isLoading) {
     return (
