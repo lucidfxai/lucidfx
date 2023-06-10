@@ -1,27 +1,36 @@
-# Stage 1 - the build process
-FROM node:18-alpine as build-deps
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm ci
-COPY . ./
-RUN npm run build
+# Base image for build stage
+FROM node:18-alpine as build
 
-# Stage 2 - the production environment
-FROM node:18-alpine
-# Create app directory
+# Set working directory
 WORKDIR /app
 
-# Create app user
-RUN addgroup -S app && adduser -S app -G app
+# Copy package files
+COPY package*.json ./
 
-# Install serve package globally
-RUN npm install -g serve
+# Install dependencies
+RUN npm ci --only=production
 
-# Copy built app from previous stage
-COPY --from=build-deps /usr/src/app/build /app
+# Copy source code
+COPY . .
 
-# Change to non-root user
-USER app
+# Build the app
+RUN npm run build
 
-# Start the app with serve on the port defined in the environment
-CMD serve -s -l tcp://0.0.0.0:${PORT}
+# Production image
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy built files from the previous stage
+COPY --from=build /app/build ./build
+
+# Copy local environment variables
+COPY .env .
+
+# Expose port
+EXPOSE 3000
+
+# Start the app
+CMD ["npm", "start"]
+
