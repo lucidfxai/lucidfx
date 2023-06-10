@@ -1,5 +1,4 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import React, { useEffect } from "react";
 import { PageLoader } from "./components/page-loader";
 import { AuthenticationGuard } from "./components/authentication-guard";
 import { Route, Routes } from "react-router-dom";
@@ -13,7 +12,6 @@ import { PublicPage } from "./pages/public-page";
 
 export const App: React.FC = () => {
   const { isLoading } = useAuth0();
-
 
   if (isLoading) {
     return (
