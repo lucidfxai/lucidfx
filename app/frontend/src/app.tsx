@@ -14,13 +14,6 @@ import { PublicPage } from "./pages/public-page";
 export const App: React.FC = () => {
   const { isLoading } = useAuth0();
 
-  useEffect(() => {
-    console.log('REACT_APP_AUTH0_DOMAIN:', process.env.REACT_APP_AUTH0_DOMAIN);
-    console.log('REACT_APP_AUTH0_CLIENT_ID:', process.env.REACT_APP_AUTH0_CLIENT_ID);
-    console.log('REACT_APP_AUTH0_CALLBACK_URL:', process.env.REACT_APP_AUTH0_CALLBACK_URL);
-    console.log('REACT_APP_AUTH0_AUDIENCE:', process.env.REACT_APP_AUTH0_AUDIENCE);
-    console.log('REACT_APP_API_SERVER_URL:', process.env.REACT_APP_API_SERVER_URL);
-  }, []);
 
   if (isLoading) {
     return (
