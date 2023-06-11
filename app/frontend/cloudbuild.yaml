@@ -60,7 +60,7 @@ substitutions:
   _SERVICE_NAME: frontend
 availableSecrets:
   secretManager:
-  - versionName: projects/926861716338/secrets/REACT_APP_API_SERVER_URL/versions/1
+  - versionName: projects/926861716338/secrets/_REACT_APP_API_SERVER_URL/versions/1
     env: '_REACT_APP_API_SERVER_URL'
   - versionName: projects/926861716338/secrets/REACT_APP_AUTH0_AUDIENCE/versions/1
     env: '_REACT_APP_AUTH0_AUDIENCE'
