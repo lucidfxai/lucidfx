@@ -21,11 +21,11 @@ steps:
       - app/frontend/Dockerfile
     id: Build
     secretEnv: [
-      'REACT_APP_API_SERVER_URL',
-      'REACT_APP_AUTH0_AUDIENCE',
-      'REACT_APP_AUTH0_CALLBACK_URL',
-      'REACT_APP_AUTH0_CLIENT_ID',
-      'REACT_APP_AUTH0_DOMAIN' ]
+      '_REACT_APP_API_SERVER_URL',
+      '_REACT_APP_AUTH0_AUDIENCE',
+      '_REACT_APP_AUTH0_CALLBACK_URL',
+      '_REACT_APP_AUTH0_CLIENT_ID',
+      '_REACT_APP_AUTH0_DOMAIN' ]
   - name: gcr.io/cloud-builders/docker
     args:
       - push
