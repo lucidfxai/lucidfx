@@ -3,6 +3,16 @@ steps:
     args:
       - build
       - '--no-cache'
+      - '--build-arg'
+      - 'REACT_APP_API_SERVER_URL=$REACT_APP_API_SERVER_URL'
+      - '--build-arg'
+      - 'REACT_APP_AUTH0_AUDIENCE=$REACT_APP_AUTH0_AUDIENCE'
+      - '--build-arg'
+      - 'REACT_APP_AUTH0_CALLBACK_URL=$REACT_APP_AUTH0_CALLBACK_URL'
+      - '--build-arg'
+      - 'REACT_APP_AUTH0_CLIENT_ID=$REACT_APP_AUTH0_CLIENT_ID'
+      - '--build-arg'
+      - 'REACT_APP_AUTH0_DOMAIN=$REACT_APP_AUTH0_DOMAIN'
       - '-t'
       - >-
         $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
@@ -42,6 +52,18 @@ substitutions:
   _PLATFORM: managed
   _TRIGGER_ID: 25242529-8d84-4164-9687-94788526b6e9
   _SERVICE_NAME: frontend
+availableSecrets:
+  secretManager:
+  - versionName: projects/926861716338/secrets/REACT_APP_API_SERVER_URL/versions/1
+    env: 'REACT_APP_API_SERVER_URL'
+  - versionName: projects/926861716338/secrets/REACT_APP_AUTH0_AUDIENCE/versions/1
+    env: 'REACT_APP_AUTH0_AUDIENCE'
+  - versionName: projects/926861716338/secrets/REACT_APP_AUTH0_CALLBACK_URL/versions/1
+    env: 'REACT_APP_AUTH0_CALLBACK_URL'
+  - versionName: projects/926861716338/secrets/REACT_APP_AUTH0_CLIENT_ID/versions/1
+    env: 'REACT_APP_AUTH0_CLIENT_ID'
+  - versionName: projects/926861716338/secrets/REACT_APP_AUTH0_DOMAIN/versions/1
+    env: 'REACT_APP_AUTH0_DOMAIN'
 tags:
   - gcp-cloud-build-deploy-cloud-run
   - gcp-cloud-build-deploy-cloud-run-managed
