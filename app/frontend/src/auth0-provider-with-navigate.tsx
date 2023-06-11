@@ -20,9 +20,6 @@ export const Auth0ProviderWithNavigate = ({
     navigate(appState?.returnTo || window.location.pathname);
   };
 
-  console.log("Environment variables:")
-  console.log(domain, clientId, redirectUri, audience)
-
   if (!(domain && clientId && redirectUri && audience)) {
     return null;
   }

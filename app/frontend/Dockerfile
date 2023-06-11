@@ -25,13 +25,6 @@ RUN npm install
 # Copying all the files in our project
 COPY . .
 
-RUN echo $REACT_APP_API_SERVER_URL
-RUN echo $REACT_APP_AUTH0_AUDIENCE
-RUN echo $REACT_APP_AUTH0_CALLBACK_URL
-RUN echo $REACT_APP_AUTH0_CLIENT_ID
-RUN echo $REACT_APP_AUTH0_DOMAIN
-RUN echo "Hello World"
-
 # Building our application
 RUN npm run build
 
