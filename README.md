@@ -1,5 +1,15 @@
 # lucidfx
 
+Stack:
+---
+- Vercel (Edge using cloudflare)
+- Nextjs, TypeScript, Drizzle-ORM, tRPC, Clerk, Tailwind CSS
+- Datastore PlanetScale
+- Axiom (logs)
+- Upstash (Crons, Cache, Events, Message queues, Rate limiting)
+
+
+
 Concept:
 --------
 - Reach out to viral video owners.
@@ -8,7 +18,6 @@ Concept:
     from the video.
 - Minimal effort on behalf of the video owner.
 - Free money glitch for viral video owner.
-
 
 ----------------------------------------------
 Target market:
@@ -28,12 +37,6 @@ Sales Copy:
 -----------
 Giving you access to powerful state of the art machine learning hardware and
 algorithms. Only pay for what you use!
-
-Stack:
-------
-Django
-Huggingface
-React
 
 Key challenges:
 ---------------
