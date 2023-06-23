@@ -3,10 +3,12 @@
 Stack:
 ---
 - Vercel (Edge using cloudflare)
-- Nextjs, TypeScript, Drizzle-ORM, tRPC, Clerk, Tailwind CSS
+- Nextjs, TypeScript, Drizzle-ORM, tRPC, Tailwind CSS
+- Clerk auth
 - Datastore PlanetScale
 - Axiom (logs)
 - Upstash (Crons, Cache, Events, Message queues, Rate limiting)
+- Replicate for ML inference
 
 
 
