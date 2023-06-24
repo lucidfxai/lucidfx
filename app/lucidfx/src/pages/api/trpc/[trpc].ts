@@ -6,26 +6,37 @@ import * as trpcNext from '@trpc/server/adapters/next';
 import { publicProcedure, router } from '~/server/trpc';
 import { z } from 'zod';
 
+
+// Define users array here
+const users = [
+  { id: '1', name: 'Alice' },
+  { id: '2', name: 'Bob' },
+  // more users...
+];
+
 const appRouter = router({
   greeting: publicProcedure
-    // This is the input schema of your procedure
-    // 💡 Tip: Try changing this and see type errors on the client straight away
     .input(
       z.object({
         name: z.string().nullish(),
       }),
     )
     .query(({ input }) => {
-      // This is what you're returning to your client
       return {
         text: `hello ${input?.name ?? 'world'}`,
-        // 💡 Tip: Try adding a new property here and see it propagate to the client straight-away
       };
     }),
-  // 💡 Tip: Try adding a new procedure here and see if you can use it in the client!
-  // getUser: publicProcedure.query(() => {
-  //   return { id: '1', name: 'bob' };
-  // }),
+  
+  getUser: publicProcedure
+    .input(z.object({
+      id: z.string(),
+    }))
+    .query(({ input }) => {
+      // Use users array here
+      const user = users.find(user => user.id === input.id);
+      if (!user) throw new Error('User not found');
+      return user;
+    }),
 });
 
 // export only the type definition of the API
