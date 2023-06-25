@@ -1,5 +1,6 @@
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { connect } from "@planetscale/database";
+import 'dotenv/config';
 
 let db: ReturnType<typeof drizzle> | undefined;
 let connection: ReturnType<typeof connect> | undefined; 

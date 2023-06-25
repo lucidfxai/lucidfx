@@ -1,6 +1,7 @@
 /**
  * This is a Next.js page.
  */
+import { getDb } from '~/db/connection';
 import { trpc } from '../utils/trpc';
 
 export default function IndexPage() {
@@ -8,6 +9,7 @@ export default function IndexPage() {
   const result = trpc.greeting.useQuery({ name: 'client' });
   const result2 = trpc.getUser.useQuery({ id: '1' });
 
+  getDb();
   if (!result.data || !result2.data) {
     return (
       <div style={styles}>
