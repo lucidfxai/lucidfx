@@ -5,6 +5,7 @@
 import * as trpcNext from '@trpc/server/adapters/next';
 import { publicProcedure, router } from '~/server/trpc';
 import { z } from 'zod';
+import { connectDb } from '../../../db/connection';
 
 
 // Define users array here
@@ -14,7 +15,10 @@ const users = [
   // more users...
 ];
 
+const db = connectDb();
+
 const appRouter = router({
+
   greeting: publicProcedure
     .input(
       z.object({
@@ -23,6 +27,7 @@ const appRouter = router({
     )
     .query(({ input }) => {
       return {
+        // text: `hello ${input?.name ?? 'world'}`,
         text: `hello ${input?.name ?? 'world'}`,
       };
     }),
