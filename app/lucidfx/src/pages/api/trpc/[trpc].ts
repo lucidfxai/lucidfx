@@ -15,7 +15,11 @@ const users = [
   // more users...
 ];
 
-const db = connectDb();
+const db = connectDb().then(db => {
+    console.log('db connected');
+  })
+  .catch(console.error);
+
 
 const appRouter = router({
 
@@ -27,7 +31,6 @@ const appRouter = router({
     )
     .query(({ input }) => {
       return {
-        // text: `hello ${input?.name ?? 'world'}`,
         text: `hello ${input?.name ?? 'world'}`,
       };
     }),

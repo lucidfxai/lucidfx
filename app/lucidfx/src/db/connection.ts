@@ -9,25 +9,14 @@ if (!databaseUrl) {
   throw new Error('DATABASE_URL not set in .env');
 }
 
-const params = url.parse(databaseUrl);
-
-if (!params.auth || !params.hostname || !params.pathname) {
-  throw new Error('Invalid DATABASE_URL format');
-}
-
-const [username, password] = params.auth.split(':');
-const database = params.pathname.split('/')[1];
-
-if (!username || !password || !database) {
-  throw new Error('Invalid auth or database format in DATABASE_URL');
-}
+const myurl = new URL(databaseUrl);
 
 const connectionDetails = {
-  host: params.hostname,
-  port: params.port,
-  user: username,
-  password,
-  database,
+  host: myurl.hostname,
+  port: myurl.port,
+  user: myurl.username,
+  password: myurl.password,
+  database: myurl.pathname.split('/')[1],
   ssl: { rejectUnauthorized: false },  // Depending on your settings, you may need to customize this SSL option
 };
 
