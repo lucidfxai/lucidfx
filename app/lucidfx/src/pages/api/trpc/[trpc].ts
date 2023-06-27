@@ -15,14 +15,15 @@ const users = [
   // more users...
 ];
 
+
 const db = connectDb().then(db => {
     console.log('db connected');
+    console.log('use database here in this block');
   })
   .catch(console.error);
 
 
 const appRouter = router({
-
   greeting: publicProcedure
     .input(
       z.object({

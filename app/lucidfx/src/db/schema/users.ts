@@ -1,27 +1,15 @@
-import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
-import { z } from "zod";
-import { createInsertSchema } from "drizzle-zod";
-
-const users = pgTable('users', {
+import { index, int, mysqlTable, serial, varchar } from 'drizzle-orm/mysql-core';
+ 
+export const users = mysqlTable('users', {
   id: serial('id').primaryKey(),
-  name: text('name').notNull(),
-  email: text('email').notNull(),
-  role: text('role', { enum: ['admin', 'user'] }).notNull(),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-});
-
-const insertUserSchema = createInsertSchema(users, {
-  id: (schema) => schema.id.positive(),
-  email: (schema) => schema.email.email(),
-  role: z.string(),
-});
+  fullName: varchar('full_name', { length: 256 }),
+  other: varchar('other', { length: 256 }),
+}, (users) => ({
+  nameIdx: index('name_idx').on(users.fullName),
+}));
  
-// Usage
-const user = insertUserSchema.parse({
-  name: 'John Doe',
-  email: 'johndoe@test.com',
-  role: 'admin',
+export const authOtps = mysqlTable('auth_otp', {
+  id: serial('id').primaryKey(),
+  phone: varchar('phone', { length: 256 }),
+  userId: int('user_id').references(() => users.id),
 });
- 
-// Zod schema type is also inferred from the table schema, so you have full type safety
-const requestSchema = insertUserSchema.pick({ name: true, email: true });
