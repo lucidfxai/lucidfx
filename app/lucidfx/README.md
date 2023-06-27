@@ -14,3 +14,4 @@ development. This is not required for staging/production, as migrations will be
 run through CI/CD.
 
 `Please only commit one migration script per feature branch`
+`Please keep migrations as clean as possible during local development`
