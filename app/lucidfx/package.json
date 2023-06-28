@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:schema": "pnpm drizzle-kit generate:mysql --schema=./src/db/schema/*",
+    "migrate": "ts-node -P tsconfig.scripts.json ./src/db/migrate.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.18.0",
@@ -38,6 +40,7 @@
     "@types/react-dom": "^18.2.4",
     "drizzle-kit": "^0.19.2",
     "eslint": "^8.40.0",
+    "ts-node": "^10.9.1",
     "typescript": "^5.1.3"
   }
 }

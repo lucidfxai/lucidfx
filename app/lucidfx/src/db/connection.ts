@@ -1,4 +1,4 @@
-import { drizzle } from "drizzle-orm/mysql2";
+import { MySql2Database, drizzle } from "drizzle-orm/mysql2";
 import { migrate } from 'drizzle-orm/mysql2/migrator';
 import mysql from "mysql2/promise";
 import 'dotenv/config';
@@ -28,19 +28,28 @@ export async function connectDb() {
   });
   const db = drizzle(connection);
 
-  /* Automation for ensuring up-to-date migrations during local development */
-  /* This is not required for staging/production, as migrations will be run
-   * through CI/CD. To create new migrations, refer to the README.md */
-  if (databaseUrl && databaseUrl.includes('localhost')) {
-    try {
-      await migrate(db, { migrationsFolder: './drizzle' });
-    } catch (error) {
-      const err = error as Error & { sqlMessage?: string };
-      console.error('Error:', err.sqlMessage || err.message);
-    }
-  }
+  // /* Automation for ensuring up-to-date migrations during local development */
+  // /* This is not required for staging/production, as migrations will be run
+  //  * through CI/CD. To create new migrations, refer to the README.md */
+  // if (databaseUrl && databaseUrl.includes('localhost')) {
+  //   try {
+  //     await migrate(db, { migrationsFolder: './drizzle' });
+  //   } catch (error) {
+  //     const err = error as Error & { sqlMessage?: string };
+  //     console.error('Error:', err.sqlMessage || err.message);
+  //   }
+  // }
 
   return db;
+}
+
+export async function runMigrations(db: MySql2Database<Record<string, unknown>>) { 
+  try {
+    await migrate(db, { migrationsFolder: './drizzle' });
+  } catch (error) {
+    const err = error as Error & { sqlMessage?: string };
+    console.error('Error:', err.sqlMessage || err.message);
+  }
 }
 
 // // Usage
