@@ -36,7 +36,7 @@ export async function connectDb() {
       await migrate(db, { migrationsFolder: './drizzle' });
     } catch (error) {
       const err = error as Error & { sqlMessage?: string };
-      console.error('Migration error:', err.sqlMessage || err.message);
+      console.error('Error:', err.sqlMessage || err.message);
     }
   }
 
