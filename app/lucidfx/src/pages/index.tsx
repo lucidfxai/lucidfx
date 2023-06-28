@@ -6,9 +6,8 @@ import { trpc } from '../utils/trpc';
 export default function IndexPage() {
   // 💡 Tip: CMD+Click (or CTRL+Click) on `greeting` to go to the server definition
   const result = trpc.greeting.useQuery({ name: 'client' });
-  const result2 = trpc.getUser.useQuery({ id: '1' });
 
-  if (!result.data || !result2.data) {
+  if (!result.data) {
     return (
       <div style={styles}>
         <h1>Loading...</h1>
@@ -24,7 +23,6 @@ export default function IndexPage() {
        * 💡 Tip: Secondary click on `text` and "Rename Symbol" to rename it both on the client & server
        */}
       <h1>{result.data.text}</h1>
-      <h1>Hello {result2.data.name}</h1>
     </div>
   );
 }

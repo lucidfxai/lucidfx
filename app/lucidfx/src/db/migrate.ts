@@ -1,9 +1,10 @@
 import { connectDb, runMigrations } from './connection';
 
 async function migrateDatabase() {
-  connectDb().then(db => {
-    runMigrations(db);
+  connectDb().then(async db => {
+    await runMigrations(db);
   });
 }
 
-migrateDatabase();
+migrateDatabase().catch(console.error);
+

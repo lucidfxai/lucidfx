@@ -28,18 +28,6 @@ export async function connectDb() {
   });
   const db = drizzle(connection);
 
-  // /* Automation for ensuring up-to-date migrations during local development */
-  // /* This is not required for staging/production, as migrations will be run
-  //  * through CI/CD. To create new migrations, refer to the README.md */
-  // if (databaseUrl && databaseUrl.includes('localhost')) {
-  //   try {
-  //     await migrate(db, { migrationsFolder: './drizzle' });
-  //   } catch (error) {
-  //     const err = error as Error & { sqlMessage?: string };
-  //     console.error('Error:', err.sqlMessage || err.message);
-  //   }
-  // }
-
   return db;
 }
 
@@ -49,13 +37,14 @@ export async function runMigrations(db: MySql2Database<Record<string, unknown>>)
   } catch (error) {
     const err = error as Error & { sqlMessage?: string };
     console.error('Error:', err.sqlMessage || err.message);
+  } finally {
+    process.exit(0);
   }
 }
 
-// // Usage
+// // Usage (Comment for Copilot users)
 // connectDb()
 //   .then(db => {
 //     // You can now use `db` here for your database operations
 //   })
 //   .catch(console.error);
-

@@ -6,20 +6,8 @@ import * as trpcNext from '@trpc/server/adapters/next';
 import { publicProcedure, router } from '~/server/trpc';
 import { z } from 'zod';
 import { connectDb } from '../../../db/connection';
+import { User, users } from '~/db/schema/users';
 
-
-// Define users array here
-const users = [
-  { id: '1', name: 'Alice' },
-  { id: '2', name: 'Bob' },
-  // more users...
-];
-
-
-const db = connectDb().then(db => {
-    console.log('db connected');
-  })
-  .catch(console.error);
 
 
 const appRouter = router({
@@ -33,17 +21,6 @@ const appRouter = router({
       return {
         text: `hello ${input?.name ?? 'world'}`,
       };
-    }),
-  
-  getUser: publicProcedure
-    .input(z.object({
-      id: z.string(),
-    }))
-    .query(({ input }) => {
-      // Use users array here
-      const user = users.find(user => user.id === input.id);
-      if (!user) throw new Error('User not found');
-      return user;
     }),
 });
 

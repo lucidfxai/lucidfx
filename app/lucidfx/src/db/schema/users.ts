@@ -1,3 +1,4 @@
+import { InferModel } from 'drizzle-orm';
 import { index, mysqlTable, serial, varchar } from 'drizzle-orm/mysql-core';
  
 export const users = mysqlTable('users', {
@@ -8,3 +9,4 @@ export const users = mysqlTable('users', {
   nameIdx: index('name_idx').on(users.fullName),
 }));
  
+export type User = InferModel<typeof users>;
