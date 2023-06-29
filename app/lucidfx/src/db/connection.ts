@@ -21,7 +21,7 @@ const connectionDetails = {
   ssl: { rejectUnauthorized: false },  // Depending on your settings, you may need to customize this SSL option
 };
 
-export async function connectDb() {
+export async function singleClientConnectDb() {
   const connection = await mysql.createConnection({
     ...connectionDetails,
     port: connectionDetails.port ? parseInt(connectionDetails.port) : undefined,

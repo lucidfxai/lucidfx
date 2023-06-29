@@ -10,3 +10,4 @@ export const users = mysqlTable('users', {
 }));
  
 export type User = InferModel<typeof users>;
+export type NewUser = InferModel<typeof users, 'insert'>; // insert type
