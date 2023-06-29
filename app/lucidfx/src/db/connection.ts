@@ -3,7 +3,6 @@ import { migrate } from 'drizzle-orm/mysql2/migrator';
 import mysql from "mysql2/promise";
 import 'dotenv/config';
 
-
 const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) {
@@ -24,7 +23,7 @@ const connectionDetails = {
 
 let db: MySql2Database<Record<string, unknown>> | undefined;
 
-async function initializedDbPoolConnection() {
+async function initializeDb() {
   const connection = mysql.createPool({
     ...connectionDetails,
     port: connectionDetails.port ? parseInt(connectionDetails.port) : undefined,
@@ -39,7 +38,7 @@ export default function getDb() {
   return db;
 }
 
-initializedDbPoolConnection().catch(err => {
+initializeDb().catch(err => {
   console.error('Error initializing database pool', err);
   process.exit(1);
 });
@@ -59,10 +58,3 @@ export async function runMigrations() {
     process.exit(0);
   }
 }
-
-// // Usage (Comment for Copilot users)
-// poolConnectDb()
-//   .then(db => {
-//     // You can now use `db` here for your database operations
-//   })
-//   .catch(console.error);
