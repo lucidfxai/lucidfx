@@ -1,9 +1,8 @@
-import { singleClientConnectDb, runMigrations } from './connection';
+import { runMigrations } from './connection';
 
 async function migrateDatabase() {
-  singleClientConnectDb().then(async db => {
-    await runMigrations(db);
-  });
+  console.log("Running migrations");
+  await runMigrations();
 }
 
 migrateDatabase().catch(console.error);

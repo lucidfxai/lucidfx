@@ -21,19 +21,37 @@ const connectionDetails = {
   ssl: { rejectUnauthorized: false },  // Depending on your settings, you may need to customize this SSL option
 };
 
-export async function singleClientConnectDb() {
-  const connection = await mysql.createConnection({
+
+let db: MySql2Database<Record<string, unknown>> | undefined;
+
+async function initializedDbPoolConnection() {
+  const connection = mysql.createPool({
     ...connectionDetails,
     port: connectionDetails.port ? parseInt(connectionDetails.port) : undefined,
   });
-  const db = drizzle(connection);
+  db = drizzle(connection);
+}
 
+export default function getDb() {
+  if (!db) {
+    throw new Error('Database not initialized');
+  }
   return db;
 }
 
-export async function runMigrations(db: MySql2Database<Record<string, unknown>>) { 
+initializedDbPoolConnection().catch(err => {
+  console.error('Error initializing database pool', err);
+  process.exit(1);
+});
+
+export async function runMigrations() { 
+  const singleConnection = await mysql.createConnection({
+    ...connectionDetails,
+    port: connectionDetails.port ? parseInt(connectionDetails.port) : undefined,
+  });
+  const singleConnectionDb = drizzle(singleConnection);
   try {
-    await migrate(db, { migrationsFolder: './drizzle' });
+    await migrate(singleConnectionDb, { migrationsFolder: './drizzle' });
   } catch (error) {
     const err = error as Error & { sqlMessage?: string };
     console.error('Error:', err.sqlMessage || err.message);
@@ -43,7 +61,7 @@ export async function runMigrations(db: MySql2Database<Record<string, unknown>>)
 }
 
 // // Usage (Comment for Copilot users)
-// connectDb()
+// poolConnectDb()
 //   .then(db => {
 //     // You can now use `db` here for your database operations
 //   })
