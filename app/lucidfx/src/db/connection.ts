@@ -1,5 +1,4 @@
 import { MySql2Database, drizzle } from "drizzle-orm/mysql2";
-import { migrate } from 'drizzle-orm/mysql2/migrator';
 import mysql from "mysql2/promise";
 import 'dotenv/config';
 
@@ -20,7 +19,6 @@ const connectionDetails = {
   ssl: { rejectUnauthorized: false },  // Depending on your settings, you may need to customize this SSL option
 };
 
-
 let db: MySql2Database<Record<string, unknown>> | undefined;
 
 async function initializeDb() {
@@ -29,12 +27,6 @@ async function initializeDb() {
     port: connectionDetails.port ? parseInt(connectionDetails.port) : undefined,
   });
   db = drizzle(connection);
-}
-
-export default function getDb() {
-  if (!db) {
-    throw new Error('Database not initialized');
-  }
   return db;
 }
 
@@ -43,18 +35,19 @@ initializeDb().catch(err => {
   process.exit(1);
 });
 
-export async function runMigrations() { 
+export default function getDb() {
+  if (!db) {
+    throw new Error('Database not initialized');
+  }
+  return db;
+}
+
+export async function initializeSingleConnectionDb() {
   const singleConnection = await mysql.createConnection({
     ...connectionDetails,
     port: connectionDetails.port ? parseInt(connectionDetails.port) : undefined,
   });
   const singleConnectionDb = drizzle(singleConnection);
-  try {
-    await migrate(singleConnectionDb, { migrationsFolder: './drizzle' });
-  } catch (error) {
-    const err = error as Error & { sqlMessage?: string };
-    console.error('Error:', err.sqlMessage || err.message);
-  } finally {
-    process.exit(0);
-  }
+  return singleConnectionDb;
 }
+
