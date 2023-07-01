@@ -1,36 +1,58 @@
-/**
- * This is a Next.js page.
- */
-import { trpc } from '../utils/trpc';
+import { type NextPage } from "next";
+import Head from "next/head";
+import Link from "next/link";
 
-export default function IndexPage() {
-  // 💡 Tip: CMD+Click (or CTRL+Click) on `greeting` to go to the server definition
-  const result = trpc.greeting.useQuery({ name: 'client' });
+import { api } from "../utils/api";
 
-  if (!result.data) {
-    return (
-      <div style={styles}>
-        <h1>Loading...</h1>
-      </div>
-    );
-  }
+const Home: NextPage = () => {
+  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+
   return (
-    <div style={styles}>
-      {/**
-       * The type is defined and can be autocompleted
-       * 💡 Tip: Hover over `data` to see the result type
-       * 💡 Tip: CMD+Click (or CTRL+Click) on `text` to go to the server definition
-       * 💡 Tip: Secondary click on `text` and "Rename Symbol" to rename it both on the client & server
-       */}
-      <h1>{result.data.text}</h1>
-    </div>
+    <>
+      <Head>
+        <title>LucidFX AI</title>
+        <meta name="description" content="LucidFX AI Video Super Resolution" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+            <span className="text-[hsl(280,100%,70%)]">LucidFX</span> AI
+          </h1>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
+            <Link
+              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+              href="https://create.t3.gg/en/usage/first-steps"
+              target="_blank"
+            >
+              <h3 className="text-2xl font-bold">First Steps →</h3>
+              <div className="text-lg">
+                Just the basics - Everything you need to know to set up your
+                database and authentication.
+              </div>
+            </Link>
+            <Link
+              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+              href="https://create.t3.gg/en/introduction"
+              target="_blank"
+            >
+              <h3 className="text-2xl font-bold">Documentation →</h3>
+              <div className="text-lg">
+                Learn more about Create T3 App, the libraries it uses, and how
+                to deploy it.
+              </div>
+            </Link>
+          </div>
+          <p className="text-2xl text-white">
+            {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+          </p>
+          <Link href="/protected" className="text-xl text-white">
+            Check out a protected procedure
+          </Link>
+        </div>
+      </main>
+    </>
   );
-}
-
-const styles = {
-  width: '100vw',
-  height: '100vh',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
 };
+
+export default Home;

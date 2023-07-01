@@ -1,8 +1,16 @@
-import type { AppType } from 'next/app';
-import { trpc } from '../utils/trpc';
+import type { AppType } from "next/app";
+import { ClerkProvider } from "@clerk/nextjs";
+import { api } from "../utils/api";
+
+import "../styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />;
+
+  return (
+    <ClerkProvider {...pageProps}>
+      <Component {...pageProps} />
+    </ClerkProvider>
+  );
 };
 
-export default trpc.withTRPC(MyApp);
+export default api.withTRPC(MyApp);
