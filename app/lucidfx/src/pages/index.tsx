@@ -1,4 +1,4 @@
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -17,29 +17,49 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            <span className="text-[hsl(280,100%,70%)]">LucidFX</span> AI
+            <span className="text-[hsl(280,100%,70%)]">LucidFX</span>.AI
           </h1>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             <Link
               className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
+              href="https://replicate.com/"
               target="_blank"
             >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
+              <h3 className="text-2xl font-bold">Replicate→</h3>
               <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
+                The future of ML deployments.
+                Bundle your model into COG containers for trivial inference.
               </div>
             </Link>
             <Link
               className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
+              href="https://upload.io/"
               target="_blank"
             >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
+              <h3 className="text-2xl font-bold">Upload.io→</h3>
               <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
+                Upload.io is where we will upload our content to!
+              </div>
+            </Link>
+            <Link
+              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+              href="https://stripe.com/gb"
+              target="_blank"
+            >
+              <h3 className="text-2xl font-bold">Stripe →</h3>
+              <div className="text-lg">
+                The best way to accept payments online.
+                Integrate the payment processor.
+              </div>
+            </Link>
+            <Link
+              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+              href="https://planetscale.com/"
+              target="_blank"
+            >
+              <h3 className="text-2xl font-bold">PlanetScale→</h3>
+              <div className="text-lg">
+                Easy to use, scalable, cloud-native MySQL database as a service.
               </div>
             </Link>
           </div>
@@ -47,7 +67,7 @@ const Home: NextPage = () => {
             {hello.data ? hello.data.greeting : "Loading tRPC query..."}
           </p>
           <Link href="/protected" className="text-xl text-white">
-            Check out a protected procedure
+            Log in with Clerk and check out a protected procedure.
           </Link>
         </div>
       </main>
