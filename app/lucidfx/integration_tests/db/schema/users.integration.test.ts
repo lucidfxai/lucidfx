@@ -1,6 +1,7 @@
 // integrationTests/userModel.test.ts
 
-import { insertUser, deleteUser, fetchUsers, NewUser, User } from '../../../src/db/schema/users'
+import { endDb } from '../../../src/db/connection';
+import { insertUser, fetchUsers, NewUser, User } from '../../../src/db/schema/users'
 
 describe('User model integration tests', () => {
   let newUser: NewUser;
@@ -27,6 +28,9 @@ describe('User model integration tests', () => {
     expect(userExists).toBe(true);
   });
 
+  afterAll(async () => {
+    endDb();
+  });
 
   // test('deletes a user from the database', async () => {
   //   if (typeof newUser.user_id === 'string') { // Checking if newUser.user_id is not null or undefined

@@ -1,4 +1,4 @@
-import { insertUser, fetchUsers, users, NewUser } from './users';
+import { insertUser, fetchUsers, users, NewUser, deleteUser } from '../schema/users';
 import getDb from '../connection';
 
 jest.mock('../connection');

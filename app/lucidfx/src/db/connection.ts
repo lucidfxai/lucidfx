@@ -2,6 +2,10 @@ import { MySql2Database, drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
 import 'dotenv/config';
 
+
+let db: MySql2Database<Record<string, unknown>> | undefined;
+let pool: mysql.Pool | undefined;
+
 const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) {
@@ -19,14 +23,12 @@ const connectionDetails = {
   ssl: { rejectUnauthorized: false },  // Depending on your settings, you may need to customize this SSL option
 };
 
-let db: MySql2Database<Record<string, unknown>> | undefined;
-
 async function initializeDb() {
-  const connection = mysql.createPool({
+  pool = mysql.createPool({
     ...connectionDetails,
     port: connectionDetails.port ? parseInt(connectionDetails.port) : undefined,
   });
-  db = drizzle(connection);
+  db = drizzle(pool);
   return db;
 }
 
@@ -40,6 +42,13 @@ export default function getDb() {
     throw new Error('Database not initialized');
   }
   return db;
+}
+
+export function endDb() {
+  if (!pool) {
+    throw new Error('Database not initialized');
+  }
+  return pool.end();
 }
 
 export async function initializeSingleConnectionDb() {
