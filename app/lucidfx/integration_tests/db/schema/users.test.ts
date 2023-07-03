@@ -1,6 +1,5 @@
 // integrationTests/userModel.test.ts
 
-import { closeDb } from '../../../src/db/connection';
 import { insertUser, deleteUser, fetchUsers, NewUser, User } from '../../../src/db/schema/users'
 
 describe('User model integration tests', () => {
