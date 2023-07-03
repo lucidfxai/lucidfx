@@ -1,9 +1,26 @@
-pnpm run dev
+# System dev dependencies:
+--------------------------
+- Docker Desktop
+- Docker Compose
+- pnpm
+- nvm
 
-# start dev database:
----------------------
-$ cd docker && docker compose up -d
+# Expose localhost to public domain (Useful for working with Auth/Clerk etc):
+-----------------------------------------------------------------------------
+Ngrok exposes localhost:3000 to a public domain.
 
-# Generate DB migrations:
--------------------------
-Generate migrations to source control
+# Scripts:
+----------
+dev
+ngrok
+build
+start
+lint
+docker:up
+docker:down
+generate:schema
+migrate
+test:unit
+test:integration
+test:integration-local
+test

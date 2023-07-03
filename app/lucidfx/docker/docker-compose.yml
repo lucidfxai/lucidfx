@@ -6,12 +6,11 @@ services:
       - SYS_NICE
     restart: always
     environment:
-      - MYSQL_DATABASE=developmentdb
-      - MYSQL_ROOT_PASSWORD=developmentdbpassword
+      - MYSQL_DATABASE=devdb
+      - MYSQL_ROOT_PASSWORD=devpassword
     ports:
       - '3306:3306'
     volumes:
-      - db:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
 volumes:
   db:
