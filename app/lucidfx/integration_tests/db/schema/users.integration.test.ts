@@ -24,16 +24,13 @@ describe('User model integration tests', () => {
     const users: User[] = await fetchUsers();
     expect(users).toBeDefined();
     expect(users.length).toBeGreaterThan(0);
-
     const userExists = users.some(user => user.user_id === newUser.user_id);
     expect(userExists).toBe(true);
   });
 
-
   test('deletes a user from the database', async () => {
     if (typeof newUser.user_id === 'string') {
       const result = await deleteUser(newUser.user_id);
-      console.log(result);
       const resultSet = result[0] as ResultSetHeader;
       expect(resultSet.affectedRows).toBe(1);
     } else {
@@ -41,15 +38,12 @@ describe('User model integration tests', () => {
     }
   });
 
+  test('verifies the user is deleted from the database', async () => {
+    const users: User[] = await fetchUsers();
+    const userExists = users.some(user => user.user_id === newUser.user_id);
+    expect(userExists).toBe(false);
+  });
 
-  //
-  //
-  // test('verifies the user is deleted from the database', async () => {
-  //   const users: User[] = await fetchUsers();
-  //
-  //   const userExists = users.some(user => user.user_id === newUser.user_id);
-  //   expect(userExists).toBe(false);
-  // });
   afterAll(async () => {
     endDb();
   });
