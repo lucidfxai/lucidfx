@@ -1,5 +1,5 @@
 import { UserButton } from "@clerk/nextjs";
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 
 const Protected: NextPage = () => {
   return (
