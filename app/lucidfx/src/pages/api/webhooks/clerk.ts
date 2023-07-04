@@ -1,6 +1,7 @@
 // src/pages/api/webhooks/clerk.ts
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Webhook, WebhookVerificationError } from 'svix';
+import { NewUser, deleteUser, fetchUsers, insertUser } from '../../../db/schema/users';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -50,18 +51,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (verifiedEvent) {
     switch (verifiedEvent.type) {
       case 'user.created':
-        console.log(verifiedEvent.data.object + " created");
+        const newUser: NewUser = {
+          user_id: verifiedEvent.data.id
+        }
+        console.log(await insertUser(newUser));
         break;
-      case 'user.updated':
-        console.log(verifiedEvent.data.object + " updated");
+      case 'user.deleted':
+        console.log(await deleteUser(verifiedEvent.data.id));
         break;
-      case 'session.created':
-        console.log("New session created: " + verifiedEvent.data.id);
-        break;
-      // ... handle other events
     }
   }
   res.status(200).json({ message: 'Event received' });
+  console.log('all users', await fetchUsers());
 }
 
 
