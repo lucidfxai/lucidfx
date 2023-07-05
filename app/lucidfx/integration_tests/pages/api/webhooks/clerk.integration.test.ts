@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { WebhookVerificationError } from 'svix';
 import handler from '../../../../src/pages/api/webhooks/clerk';
 import { deleteUser, insertUser } from '../../../../src/server/db/schema/users';
-import clerk  from "@clerk/clerk-sdk-node";
 
 
 // Add a test to make sure the webhook actually makes the call to our endpoint
