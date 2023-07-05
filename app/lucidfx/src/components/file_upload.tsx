@@ -1,4 +1,3 @@
-// src/pages/FileUpload.tsx
 import { Uploader } from 'uploader';
 import { UploadDropzone } from 'react-uploader';
 
