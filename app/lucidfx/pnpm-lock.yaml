@@ -62,6 +62,9 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
+  react-uploader:
+    specifier: ^3.37.0
+    version: 3.37.0(react@18.2.0)
   superjson:
     specifier: ^1.12.4
     version: 1.12.4
@@ -71,6 +74,9 @@ dependencies:
   tailwindcss:
     specifier: 3.3.2
     version: 3.3.2(ts-node@10.9.1)
+  uploader:
+    specifier: ^3.37.0
+    version: 3.37.0
   url:
     specifier: ^0.11.1
     version: 0.11.1
@@ -458,8 +464,21 @@ packages:
       tslib: 2.4.1
     dev: false
 
-  /@clerk/clerk-react@4.21.1(react@18.2.0):
-    resolution: {integrity: sha512-sviPg3Cp9j9mT3gW7DUJT9w/hxg37T2yxMMs93WSonEs8OA9bM6t2uMwT7NZAy1kdVVwjlWs6c+TQ7/M2qbEDA==}
+  /@clerk/backend@0.24.0:
+    resolution: {integrity: sha512-An1VKCFlFTROUYuELDwY5B6FmbVmIDuW837t0JfgbOLBYo1yoUgXZHB/wttGISaHt+CiOs1+CAI2U3iHxkaxhA==}
+    engines: {node: '>=14'}
+    dependencies:
+      '@clerk/types': 3.46.1
+      '@peculiar/webcrypto': 1.4.1
+      '@types/node': 16.18.6
+      deepmerge: 4.2.2
+      node-fetch-native: 1.0.1
+      snakecase-keys: 5.4.4
+      tslib: 2.4.1
+    dev: false
+
+  /@clerk/clerk-react@4.22.0(react@18.2.0):
+    resolution: {integrity: sha512-vtGOszKYpDdV3cFtiG24jf1UdFGrXIfIzTyjh3aHd2mXGE2dIm8m04X3+mHBDStJFpJNzim8f+7HMLVeMRJhkA==}
     engines: {node: '>=14'}
     peerDependencies:
       react: '>=16'
@@ -471,11 +490,11 @@ packages:
       tslib: 2.4.1
     dev: false
 
-  /@clerk/clerk-sdk-node@4.10.14:
-    resolution: {integrity: sha512-1rNo/CIp+fmlJ1c18KpvMJmJECB5kcep6Y18DDHAOwXH1NmmrNyPIZZVDSDk4zrb/Hs1Rv3dAImjOwmOujCTOQ==}
+  /@clerk/clerk-sdk-node@4.10.15:
+    resolution: {integrity: sha512-fif8iwedLDFgllPLx8xwxA66ICbp7KjsSULqb8mcKXHPnZ/xL17eZSx4puHg4CEGBmOxY6IL5nbRj1+s+TfgqQ==}
     engines: {node: '>=14'}
     dependencies:
-      '@clerk/backend': 0.23.7
+      '@clerk/backend': 0.24.0
       '@clerk/types': 3.46.1
       '@types/cookies': 0.7.7
       '@types/express': 4.17.14
@@ -495,8 +514,8 @@ packages:
       react-dom: ^17.0.2 || ^18.0.0-0
     dependencies:
       '@clerk/backend': 0.23.7
-      '@clerk/clerk-react': 4.21.1(react@18.2.0)
-      '@clerk/clerk-sdk-node': 4.10.14
+      '@clerk/clerk-react': 4.22.0(react@18.2.0)
+      '@clerk/clerk-sdk-node': 4.10.15
       '@clerk/types': 3.46.1
       next: 13.4.7(@babel/core@7.22.6)(react-dom@18.2.0)(react@18.2.0)
       path-to-regexp: 6.2.1
@@ -1134,7 +1153,7 @@ packages:
       '@jridgewell/trace-mapping': 0.3.18
       '@types/node': 20.3.1
       chalk: 4.1.2
-      collect-v8-coverage: 1.0.1
+      collect-v8-coverage: 1.0.2
       exit: 0.1.2
       glob: 7.2.3
       graceful-fs: 4.2.11
@@ -1177,7 +1196,7 @@ packages:
       '@jest/console': 29.6.0
       '@jest/types': 29.6.0
       '@types/istanbul-lib-coverage': 2.0.4
-      collect-v8-coverage: 1.0.1
+      collect-v8-coverage: 1.0.2
     dev: true
 
   /@jest/test-sequencer@29.6.0:
@@ -1849,20 +1868,24 @@ packages:
       eslint-visitor-keys: 3.4.1
     dev: false
 
-  /acorn-jsx@5.3.2(acorn@8.9.0):
+  /@upload-io/upload-api-client-upload-js@2.15.0:
+    resolution: {integrity: sha512-UGqT4wxCDhTTKnTLvqtKCyPJSswA2z6/Z6/sMakWGdJBBuwCHcOyXgoWafbPILrgWp3oMMQjnTfwwMBmR0O54w==}
+    dev: false
+
+  /acorn-jsx@5.3.2(acorn@8.10.0):
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
-      acorn: 8.9.0
+      acorn: 8.10.0
     dev: false
 
   /acorn-walk@8.2.0:
     resolution: {integrity: sha512-k+iyHEuPgSw6SbuDpGQM+06HQUa04DZ3o+F6CSzXMvvI5KMvnaEqXe+YVe555R9nn6GPt404fos4wcgpw12SDA==}
     engines: {node: '>=0.4.0'}
 
-  /acorn@8.9.0:
-    resolution: {integrity: sha512-jaVNAFBHNLXspO543WnNNPZFRtavh3skAkITqD0/2aeMkKZTN+254PyhwxFYrk3vQ1xfY+2wbesJMs/JC8/PwQ==}
+  /acorn@8.10.0:
+    resolution: {integrity: sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -2305,6 +2328,10 @@ packages:
     resolution: {integrity: sha512-0TNiGstbQmCFwt4akjjBg5pLRTSyj/PkWQ1ZoO2zntmg9yLqSRxwEa4iCfQLGjqhiqBfOJa7W/E8wfGrTDmlZQ==}
     dev: true
 
+  /classnames@2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+    dev: false
+
   /cli-color@2.0.3:
     resolution: {integrity: sha512-OkoZnxyC4ERN3zLzZaY9Emb7f/MhBOIpePv0Ycok0fJYT+Ouo00UBEIwsVsr0yoow++n5YWlSUgST9GKhNHiRQ==}
     engines: {node: '>=0.10'}
@@ -2340,8 +2367,8 @@ packages:
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
     dev: true
 
-  /collect-v8-coverage@1.0.1:
-    resolution: {integrity: sha512-iBPtljfCNcTKNAto0KEtDfZ3qzjJvqE3aTGZsbhjSBlorqpXJlaWWtPO35D+ZImoC3KWejX64o+yPGxhWSTzfg==}
+  /collect-v8-coverage@1.0.2:
+    resolution: {integrity: sha512-lHl4d5/ONEbLlJvaJNtsF/Lz+WvB07u2ycqTYbdrq7UypDXailES4valYb2eWiJFxZlVmpGekfqoxQhzyFdT4Q==}
     dev: true
 
   /color-convert@1.9.3:
@@ -3181,8 +3208,8 @@ packages:
     resolution: {integrity: sha512-1FH/IiruXZ84tpUlm0aCUEwMl2Ho5ilqVh0VvQXw+byAz/4SAciyHLlfmL5WYqsvD38oymdUwBss0LtK8m4s/A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
-      acorn: 8.9.0
-      acorn-jsx: 5.3.2(acorn@8.9.0)
+      acorn: 8.10.0
+      acorn-jsx: 5.3.2(acorn@8.10.0)
       eslint-visitor-keys: 3.4.1
     dev: false
 
@@ -4294,7 +4321,7 @@ packages:
       '@types/node': 20.3.1
       chalk: 4.1.2
       cjs-module-lexer: 1.2.3
-      collect-v8-coverage: 1.0.1
+      collect-v8-coverage: 1.0.2
       glob: 7.2.3
       graceful-fs: 4.2.11
       jest-haste-map: 29.6.0
@@ -4546,6 +4573,10 @@ packages:
   /lodash.clonedeep@4.5.0:
     resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
     dev: true
+
+  /lodash.isequal@4.5.0:
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    dev: false
 
   /lodash.memoize@4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
@@ -5178,6 +5209,10 @@ packages:
       source-map-js: 1.0.2
     dev: false
 
+  /preact@10.15.1:
+    resolution: {integrity: sha512-qs2ansoQEwzNiV5eAcRT1p1EC/dmEzaATVDJNiB3g2sRDWdA7b7MurXdJjB2+/WQktGWZwxvDrnuRFbWuIr64g==}
+    dev: false
+
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -5191,6 +5226,10 @@ packages:
       ansi-styles: 5.2.0
       react-is: 18.2.0
     dev: true
+
+  /progress-smoother@1.4.0:
+    resolution: {integrity: sha512-ctIG/KF/3DQ1zQHMWbXjcnicggTsEzZEA2JEnJNrPtK88tmqN9cfQf01yfLWGCBF93R5XN1EUe/z/IV5NKrmCw==}
+    dev: false
 
   /prompts@2.4.2:
     resolution: {integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==}
@@ -5287,6 +5326,16 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /react-uploader@3.37.0(react@18.2.0):
+    resolution: {integrity: sha512-XmpnL0LbPJkID5usjjoRRPVOibqE/a09511ARK/yEYv0OQoIyhfw16h90A6y/j0hUiP8/224swyuWJxsfjLujA==}
+    peerDependencies:
+      react: '>=16.3.0'
+    dependencies:
+      lodash.isequal: 4.5.0
+      react: 18.2.0
+      uploader: 3.37.0
     dev: false
 
   /react@18.2.0:
@@ -5922,7 +5971,7 @@ packages:
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
       '@types/node': 20.3.1
-      acorn: 8.9.0
+      acorn: 8.10.0
       acorn-walk: 8.2.0
       arg: 4.1.3
       create-require: 1.1.1
@@ -6034,6 +6083,21 @@ packages:
       browserslist: 4.21.9
       escalade: 3.1.1
       picocolors: 1.0.0
+
+  /upload-js@2.20.0:
+    resolution: {integrity: sha512-pwu7NejaJrqQrv8w4gfYRLlqgzJXggZs7pleV2kMHL/n8mCDWTX19j5WS/+bBZbtuGTZLtWjt+HJtyxXxiumIA==}
+    dependencies:
+      '@upload-io/upload-api-client-upload-js': 2.15.0
+      progress-smoother: 1.4.0
+    dev: false
+
+  /uploader@3.37.0:
+    resolution: {integrity: sha512-2ugcDRXKEszsL0HhsLjl8wuu8JY2gguM4FE+4lN/SGkSdlrXHsjrWqplsSY9vgNV/hKBv41CUP/aaWqjEsZUYg==}
+    dependencies:
+      classnames: 2.3.2
+      preact: 10.15.1
+      upload-js: 2.20.0
+    dev: false
 
   /uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
