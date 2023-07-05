@@ -1,14 +1,8 @@
-// integration_tests/pages/api/webhooks/clerk.integration.test.ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import { WebhookVerificationError } from 'svix';
-import handler from '../../../../src/pages/api/webhooks/clerk';
-import { deleteUser, insertUser } from '../../../../src/server/db/schema/users';
+import { Webhook, WebhookVerificationError } from 'svix';
+import handler from './clerk_handler';
+import { insertUser, deleteUser, fetchUsers } from '../db/schema/users';
 
-
-// Add a test to make sure the webhook actually makes the call to our endpoint
-// when a user is created.
-
-// In the test setup
 jest.mock('svix', () => ({
   Webhook: jest.fn().mockImplementation(() => ({
     verify: jest.fn((payload, headers) => {
@@ -21,7 +15,7 @@ jest.mock('svix', () => ({
   WebhookVerificationError: jest.requireActual('svix').WebhookVerificationError,
 }));
 
-jest.mock('../../../../src/server/db/schema/users', () => ({
+jest.mock('../db/schema/users', () => ({
   insertUser: jest.fn(),
   deleteUser: jest.fn(),
   fetchUsers: jest.fn(),
@@ -77,12 +71,6 @@ describe('Clerk Webhook Tests', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Invalid webhook signature' });
   });
 
-  it('should respond with 200 if webhook is verified and event is valid', async () => {
-    await handler(req as NextApiRequest, res as NextApiResponse);
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
-  });
-
   it('should call insertUser on "user.created" event', async () => {
     req.body.type = 'user.created';
     await handler(req as NextApiRequest, res as NextApiResponse);
@@ -98,5 +86,24 @@ describe('Clerk Webhook Tests', () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
   });
-});
 
+  it('should respond with 200 if webhook is verified and event is valid', async () => {
+    await handler(req as NextApiRequest, res as NextApiResponse);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
+  });
+
+  it('should call fetchUsers after processing event', async () => {
+    await handler(req as NextApiRequest, res as NextApiResponse);
+    expect(fetchUsers).toHaveBeenCalled();
+  });
+
+  it('should handle unexpected errors gracefully', async () => {
+    (Webhook as unknown as jest.Mock).mockImplementationOnce(() => ({
+      verify: () => { throw new Error('Unexpected error'); },
+    }));
+    await handler(req as NextApiRequest, res as NextApiResponse);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Internal server error' });
+  });
+});
