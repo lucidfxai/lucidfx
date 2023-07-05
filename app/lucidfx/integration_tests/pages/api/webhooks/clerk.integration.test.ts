@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { WebhookVerificationError } from 'svix';
 import handler from '../../../../src/pages/api/webhooks/clerk';
 import { deleteUser, insertUser } from '../../../../src/server/db/schema/users';
+import clerk  from "@clerk/clerk-sdk-node";
 
 
 // Add a test to make sure the webhook actually makes the call to our endpoint
@@ -100,6 +101,34 @@ describe('Clerk Webhook Tests', () => {
   });
 });
 
+
+// Probably want to implement this integration test locally once we have funds
+// to pay for ngrok to ensure our endpoint is working as expected with Clerk
+// webhooks
+
 // describe('Making real requests to the Clerk API', () => {
-//   
-// }
+//   let userId: string;
+//
+//   beforeEach(async () => {
+//     // Create a new user
+//     const user = await clerk.users.createUser({
+//       emailAddress: ['test@example.com'],
+//       firstName: 'Test',
+//       lastName: 'User'
+//     });
+//     userId = user.id;
+//   });
+//   it('should call insertUser on "user.created" event', async () => {
+//     body.type = {
+//       type: 'user.created',
+//       data: { id: userId },
+//     };
+//
+//     await handler(req as NextApiRequest, res as NextApiResponse);
+//
+//     expect(insertUser).toHaveBeenCalledWith({ user_id: userId });
+//     expect(res.status).toHaveBeenCalledWith(200);
+//     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
+//   });
+//
+// });
