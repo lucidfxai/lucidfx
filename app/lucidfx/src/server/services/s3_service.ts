@@ -16,7 +16,8 @@ export class S3Service {
   public async upload(name: string, buffer: Buffer): Promise<any> {
     const bucket = this.bucket;
     const params = { Bucket: bucket, Key: name, Body: buffer };
-    const upload = await this.s3.upload(params).promise();
-    return upload;
+    const uploadResponse = await this.s3.upload(params).promise();
+    console.log('File name:', uploadResponse.Key);
+    return uploadResponse;
   }
 }
