@@ -1,29 +1,40 @@
-import { S3Service } from '../../../src/server/services/s3_service';
-import fs from 'fs';
-import path from 'path';
+import { S3Service } from '../../../src/server/services/s3_service';  // Change this path to your actual path
+import AWS from 'aws-sdk';
 
 describe('S3Service Integration Test', () => {
   let s3Service: S3Service;
-  
+  const s3 = new AWS.S3();
+
   beforeEach(() => {
     s3Service = new S3Service();
   });
 
-  it('should upload file to S3 bucket correctly', async () => {
-    const filePath = path.resolve(__dirname, './test_file.txt'); // replace with your actual file path
-    const buffer = fs.readFileSync(filePath);
-    
-    const response = await s3Service.upload('test_file.txt', buffer);
-    
-    // Here you should have your own logic to verify the file upload.
-    // It could be checking response, or you might need to perform a separate S3 GET operation to ensure the file is there and correct.
+  it('should get signed URL correctly', async () => {
+    const params = {
+      Bucket: process.env.AWS_BUCKET_NAME as string,  // assuming the bucket is pre-created and name stored in env variable
+      Key: 'test-file.txt',
+      Expires: 300  // the URL will be valid for 300 seconds (5 minutes)
+    };
 
-    // This is a very simplified example where we only check if the response has the expected properties.
-    expect(response).toHaveProperty('Location');
-    expect(response).toHaveProperty('ETag');
-    expect(response).toHaveProperty('Bucket');
-    expect(response).toHaveProperty('Key');
+    const signedUrl = await s3Service.getSignedUrlPromise('putObject', params);
 
-    console.log(response);
+    // Use fetch or any http client to PUT object. Here, 'node-fetch' is used.
+    const response = await fetch(signedUrl, { method: 'PUT', body: 'Hello world' });
+
+    expect(response.ok).toBe(true);  // The fetch API sets the ok property to true if the status is successful
+
+    // Optionally, you can further verify that the object was correctly written
+    // We only include Bucket and Key in params for getObject call
+    const s3Object = await s3.getObject({ Bucket: params.Bucket, Key: params.Key }).promise();
+    if (s3Object.Body) {  // Check if Body is defined before using it
+      expect(s3Object.Body.toString()).toBe('Hello world');
+    } else {
+      throw new Error('S3 object Body is undefined');
+    }
+
+    // Cleanup the object after test
+    // We only include Bucket and Key in params for deleteObject call
+    await s3.deleteObject({ Bucket: params.Bucket, Key: params.Key }).promise();
   });
 });
+
