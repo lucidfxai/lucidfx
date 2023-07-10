@@ -1,5 +1,6 @@
 import { UserButton } from "@clerk/nextjs";
 import type { NextPage } from "next";
+import FileUploader from "../components/s3_file_uploader";
 
 const Protected: NextPage = () => {
   return (
@@ -9,6 +10,7 @@ const Protected: NextPage = () => {
           Welcome to the{" "}
           <span className="text-[hsl(280,100%,70%)]">Protected</span> Page
         </h1>
+        <FileUploader />
         <p className="text-2xl text-white">Upload your video here!</p>
         <p className="text-2xl text-white">Click this User Button!</p>
         <UserButton afterSignOutUrl="/" />
