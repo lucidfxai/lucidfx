@@ -1,60 +1,71 @@
 import { useEffect, useState } from 'react';
 import { api } from '../utils/api';
 import React from 'react';
-
+import 'dotenv/config';
 
 const FileUploader = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const parameters = {
-    Bucket: 'testBucket',
-    Key: 'testKey',
-    Expires: 60,
-  };
+    const [file, setFile] = useState<File | null>(null);
+    const [uploading, setUploading] = useState(false);
+    const [url, setUrl] = useState<string | null>(null);
 
-  const { data: url, isLoading, isError, error } = api.s3_service_router.getSignedUrlPromise.useQuery({ operation: 'putObject', parameters });
-
-  useEffect(() => {
-    const onUpload = async () => {
-      setUploading(true);
-      try {
-        // Use `url` to upload the file
-        // ...
-      } catch (error) {
+    const getSignedUrlPromiseMutation = api.s3_service_router.getSignedUrlPromise.useMutation({
+      onSuccess: (data) => {
+        setUrl(data);
+      },
+      onError: (error) => {
         console.error('Error during the upload', error);
-      } finally {
-        setUploading(false);
+      }
+    });
+
+    useEffect(() => {
+      if (file) {
+        setUploading(true);
+        getSignedUrlPromiseMutation.mutate();
+      }
+    }, [file]);
+
+    useEffect(() => {
+      if (url && file) {
+        console.log('url', url);
+        uploadFile(url, file);
+      }
+    }, [url, file]);
+
+    const uploadFile = async (signedUrl: string, file: File) => {
+      // Your logic to upload the file goes here
+      // You can use 'url' and 'file' here
+      const options = {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+        },
+      };
+
+      try {
+        const response = await fetch(signedUrl, options);
+        console.log('response', response);
+        if (response.status !== 200) {
+          throw new Error(`Could not upload file: ${response.statusText}`);
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    }
+
+    const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files && event.target.files.length > 0) {
+        setFile(event.target.files[0]);
       }
     };
-    if (file && url) {
-      onUpload();
-    }
-  }, [file, url]);
-
-  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
-    }
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError && error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   return (
   <div data-testid="file-uploader">
       <div>
         <input id="fileInput" type="file" onChange={onFileChange} className="hidden" />
         <label htmlFor="fileInput" className="cursor-pointer inline-block px-4 py-2 bg-blue-500 text-white rounded">
-          Choose File
+          Choose File to Upload 
         </label>
-        <button disabled={isLoading || !file} className={`ml-2 inline-block px-4 py-2 rounded ${isLoading || !file ? 'bg-gray-500' : 'bg-blue-500'} text-white`}>
-          {isLoading ? 'Uploading...' : 'Upload'}
-        </button>
       </div>
     </div>
   );

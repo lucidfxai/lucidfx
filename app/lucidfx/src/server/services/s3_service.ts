@@ -1,16 +1,9 @@
 import { S3 } from 'aws-sdk';
+import { v4 as uuidv4 } from 'uuid';
 import 'dotenv/config';
 
-export interface CustomPutObjectRequest {
-  ACL?: string;
-  Body?: Buffer;
-  Bucket: string;
-  Key: string;
-  Expires: number;
-}
-
 export class S3Service {
-  private readonly s3: S3;
+ private readonly s3: S3;
   constructor() {
     this.s3 = new S3({
       accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -19,8 +12,21 @@ export class S3Service {
     });
   }
 
-  public async getSignedUrlPromise(operation: string, parameters: CustomPutObjectRequest): Promise<string> {
+  public async getSignedUrlPromise(): Promise<string> {
+    const uniqueKey = await this.generateUniqueKey();
+    const operation = 'putObject';
+    const parameters = {
+      Bucket: process.env.AWS_BUCKET_NAME || 'lucidfx-dev',
+      Key: uniqueKey,
+      Expires: 60,
+    };
     return this.s3.getSignedUrlPromise(operation, parameters);
+  }
+
+  private async generateUniqueKey(): Promise<string> {
+    const uuid = uuidv4();
+    const uniqueKey = `${uuid}-${Date.now()}`;
+    return uniqueKey;
   }
 }
 
