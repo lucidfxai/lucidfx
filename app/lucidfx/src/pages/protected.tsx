@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import type { NextPage } from "next";
 import FileUploader from "../components/s3_file_uploader";
+import React from 'react';
 
 const Protected: NextPage = () => {
   return (

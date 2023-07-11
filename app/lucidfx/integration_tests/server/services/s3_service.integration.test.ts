@@ -1,4 +1,4 @@
-import { S3Service } from '../../../src/server/services/s3_service';  // Change this path to your actual path
+import { S3Service } from '../../../src/server/services/s3_service'; 
 import AWS from 'aws-sdk';
 
 describe('S3Service Integration Test', () => {
@@ -11,7 +11,7 @@ describe('S3Service Integration Test', () => {
 
   it('should get signed URL correctly', async () => {
     const params = {
-      Bucket: process.env.AWS_BUCKET_NAME as string,  // assuming the bucket is pre-created and name stored in env variable
+      Bucket: process.env.AWS_BUCKET_NAME as string,
       Key: 'test-file.txt',
       Expires: 300  // the URL will be valid for 300 seconds (5 minutes)
     };

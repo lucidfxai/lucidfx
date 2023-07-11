@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../utils/api';
+import React from 'react';
+
 
 const FileUploader = () => {
   const [file, setFile] = useState<File | null>(null);
