@@ -105,7 +105,9 @@ describe('Clerk Webhook Tests', () => {
 
 // Probably want to implement this integration test locally once we have funds
 // to pay for ngrok to ensure our endpoint is working as expected with Clerk
-// webhooks
+// webhooks.
+//
+// Probably just set this up for staging.
 //
 //    CLERK API LIKELY BROKEN FOR NOW
 //
