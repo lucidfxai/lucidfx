@@ -17,7 +17,7 @@ export class S3Service {
     return this.s3;
   }
 
-  public async getSignedUrlPromise(): Promise<{url: string, uniqueKey: string}> {
+  public async getSignedPutUrlPromise(): Promise<{url: string, uniqueKey: string}> {
     const uniqueKey = await this.generateUniqueKey();
     const operation = 'putObject';
     const parameters = {
@@ -34,6 +34,16 @@ export class S3Service {
     const uuid = uuidv4();
     const uniqueKey = `uuid-${uuid}-date-${Date.now()}`;
     return uniqueKey;
+  }
+
+  public async getSignedGetUrlPromise(s3Key: string): Promise<string> {
+    const operation = 'getObject';
+    const parameters = {
+      Bucket: process.env.AWS_BUCKET_NAME || 'lucidfx-dev',
+      Key: s3Key,
+      Expires: 60 * 5, // the URL will be valid for 5 minutes
+    };
+    return this.s3.getSignedUrlPromise(operation, parameters);
   }
 }
 

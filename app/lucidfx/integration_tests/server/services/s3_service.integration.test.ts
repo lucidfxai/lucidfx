@@ -16,11 +16,11 @@ describe('S3Service Integration Test', () => {
       Expires: 60 
     };
 
-    const { url, uniqueKey } = await s3Service.getSignedUrlPromise();
+    const { url, uniqueKey } = await s3Service.getSignedPutUrlPromise();
 
     const response = await fetch(url, { method: 'PUT', body: 'Hello world' });
 
-    expect(response.ok).toBe(true);  // The fetch API sets the ok property to true if the status is successful
+    expect(response.ok).toBe(true);
 
     const s3Object = await s3.getObject({ Bucket: params.Bucket, Key: uniqueKey }).promise();
     if (s3Object.Body) { 
@@ -31,5 +31,28 @@ describe('S3Service Integration Test', () => {
 
     await s3.deleteObject({ Bucket: params.Bucket, Key: params.Key }).promise();
   });
+
+  it('should get signed get URL correctly', async () => {
+    const params = {
+      Bucket: process.env.AWS_BUCKET_NAME as string,
+      Key: 'test-file.txt',
+      Expires: 60
+    };
+
+    const { url: uploadUrl, uniqueKey } = await s3Service.getSignedPutUrlPromise();
+    const uploadResponse = await fetch(uploadUrl, { method: 'PUT', body: 'Hello world' });
+    expect(uploadResponse.ok).toBe(true);
+
+    const downloadUrl = await s3Service.getSignedGetUrlPromise(uniqueKey);
+
+    const downloadResponse = await fetch(downloadUrl);
+    expect(downloadResponse.ok).toBe(true);
+    const downloadedFileContents = await downloadResponse.text();
+
+    expect(downloadedFileContents).toBe('Hello world');
+
+    await s3.deleteObject({ Bucket: params.Bucket, Key: uniqueKey }).promise();
+  });
+
 });
 
