@@ -25,8 +25,8 @@ jest.mock('../utils/api', () => {
     ...actual.api,
     s3_service_router: {
       ...actual.api.s3_service_router,
-      getSignedUrlPromise: {
-        ...actual.api.s3_service_router.getSignedUrlPromise,
+      getSignedPutUrlPromise: {
+        ...actual.api.s3_service_router.getSignedPutUrlPromise,
         useMutation: () => mockMutation,
       },
     },

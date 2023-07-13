@@ -8,7 +8,7 @@ const FileUploader = () => {
     const [uploading, setUploading] = useState(false);
     const [url, setUrl] = useState<string | null>(null);
 
-    const getSignedUrlPromiseMutation = api.s3_service_router.getSignedUrlPromise.useMutation({
+    const getSignedPutUrlPromiseMutation = api.s3_service_router.getSignedPutUrlPromise.useMutation({
       onSuccess: (data) => {
         setUrl(data.url);
       },
@@ -20,7 +20,7 @@ const FileUploader = () => {
     useEffect(() => {
       if (file) {
         setUploading(true);
-        getSignedUrlPromiseMutation.mutate();
+        getSignedPutUrlPromiseMutation.mutate();
       }
     }, [file]);
 
