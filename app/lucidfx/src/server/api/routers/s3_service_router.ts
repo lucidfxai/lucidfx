@@ -6,6 +6,6 @@ const s3Service = new S3Service();
 export const s3ServiceRouter = createTRPCRouter({
   getSignedUrlPromise: protectedProcedure
     .mutation(async ({ }) => {
-      return s3Service.getSignedUrlPromise();
+      return s3Service.getSignedPutUrlPromise();
     }),
 });
