@@ -1,39 +1,39 @@
-import { S3 } from 'aws-sdk';
-import { PutObjectRequest } from 'aws-sdk/clients/s3';
-import 'dotenv/config';
-import { CustomPutObjectRequest, S3Service } from '../../../src/server/services/s3_service';  // Change this path to your actual path
+import { S3Service } from './s3_service';
 
-jest.mock('aws-sdk', () => {
-  return {
-    S3: jest.fn().mockImplementation(() => {
-      return {
-        getSignedUrlPromise: jest.fn().mockImplementation((operation, parameters) => {
-          // Mock the behavior of getSignedUrlPromise
-          // This is a simplified version that returns a predictable URL
-          return Promise.resolve(`https://mock-s3-url/${parameters.Bucket}/${parameters.Key}`);
-        })
-      };
-    })
-  };
-});
+jest.mock('aws-sdk', () => ({
+  S3: jest.fn().mockImplementation(() => ({
+    getSignedUrlPromise: jest.fn().mockImplementation(() => Promise.resolve('https://mocksignedurl.com')),
+  })),
+}));
 
-describe('S3Service Integration Test', () => {
+describe('S3Service', () => {
   let s3Service: S3Service;
+  let mockGetSignedUrlPromise: jest.Mock;
 
   beforeEach(() => {
+    jest.clearAllMocks();
     s3Service = new S3Service();
+    mockGetSignedUrlPromise = (s3Service.getS3Instance() as any).getSignedUrlPromise;
   });
 
-  it('should get signed URL correctly', async () => {
-    const parameters: CustomPutObjectRequest = {
-      Bucket: 'test-bucket',
-      Key: 'test-file.txt',
-      Expires: 60// the URL will be valid for 60 seconds
-    };
+  it('should create an instance correctly', () => {
+    expect(s3Service).toBeDefined();
+  });
 
-    const signedUrl = await s3Service.getSignedUrlPromise('putObject', parameters);
+  it('should call getSignedUrlPromise correctly', async () => {
+    const mockUrl = 'https://mocksignedurl.com';
 
-    expect(signedUrl).toEqual('https://mock-s3-url/test-bucket/test-file.txt');
+    const response = await s3Service.getSignedUrlPromise();
+
+    expect(response.url).toEqual(mockUrl);
+    expect(typeof response.uniqueKey).toEqual('string');
+    expect(response.uniqueKey).toBeTruthy(); // checks that uniqueKey is not an empty string
+    expect(response.uniqueKey).toMatch(/uuid-.*-date-.*/);
+    expect(mockGetSignedUrlPromise).toBeCalledWith('putObject', expect.objectContaining({
+      Bucket: expect.any(String),
+      Key: expect.any(String),
+      Expires: 60
+    }));
   });
 });
 

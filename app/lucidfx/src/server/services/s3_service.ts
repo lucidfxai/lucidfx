@@ -3,7 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import 'dotenv/config';
 
 export class S3Service {
- private readonly s3: S3;
+  private s3: S3;
+
   constructor() {
     this.s3 = new S3({
       accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -12,7 +13,11 @@ export class S3Service {
     });
   }
 
-  public async getSignedUrlPromise(): Promise<string> {
+  public getS3Instance() {
+    return this.s3;
+  }
+
+  public async getSignedUrlPromise(): Promise<{url: string, uniqueKey: string}> {
     const uniqueKey = await this.generateUniqueKey();
     const operation = 'putObject';
     const parameters = {
@@ -20,14 +25,17 @@ export class S3Service {
       Key: uniqueKey,
       Expires: 60,
     };
-    return this.s3.getSignedUrlPromise(operation, parameters);
+    const url = await this.s3.getSignedUrlPromise(operation, parameters);
+    return { url, uniqueKey };
   }
+
 
   private async generateUniqueKey(): Promise<string> {
     const uuid = uuidv4();
-    const uniqueKey = `${uuid}-${Date.now()}`;
+    const uniqueKey = `uuid-${uuid}-date-${Date.now()}`;
     return uniqueKey;
   }
 }
 
 export const s3Service = new S3Service();
+

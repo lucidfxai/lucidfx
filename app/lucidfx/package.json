@@ -17,7 +17,9 @@
     "migrate": "ts-node -P tsconfig.scripts.json ./scripts/migrate.ts",
     "test:unit": "jest --config jest.unit.config.js",
     "test:integration": "jest --config jest.integration.config.js",
-    "test": "pnpm test:unit && pnpm test:integration"
+    "test": "pnpm test:unit && pnpm test:integration",
+    "test:unit:interactive": "jest --config jest.unit.config.js --watch",
+    "test:integration:interactive": "jest --config jest.integration.config.js --watch"
   },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^4.10.15",

@@ -10,7 +10,7 @@ const FileUploader = () => {
 
     const getSignedUrlPromiseMutation = api.s3_service_router.getSignedUrlPromise.useMutation({
       onSuccess: (data) => {
-        setUrl(data);
+        setUrl(data.url);
       },
       onError: (error) => {
         console.error('Error during the upload', error);
