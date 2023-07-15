@@ -45,6 +45,13 @@ export class S3Service {
     };
     return this.s3.getSignedUrlPromise(operation, parameters);
   }
+
+  public async addFileToFilesTableDbPromise(userId: string, uniqueKey: string): Promise<string> {
+    console.log('addFileToFilesTableDbPromise', userId, uniqueKey);
+    const returnval = 'added successfully';
+    return returnval;
+  }
+
 }
 
 export const s3Service = new S3Service();

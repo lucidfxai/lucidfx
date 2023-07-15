@@ -60,5 +60,6 @@ describe('S3Service', () => {
       Expires: 60 * 5
     });
   });
+
 });
 
