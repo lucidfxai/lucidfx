@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../utils/api';
 import React from 'react';
 import 'dotenv/config';
-import { uploadFile } from '../services/file_upload_service';
+import { uploadFile } from '../services/s3_file_uploader_service';
 import {TRPCClientErrorLike} from '@trpc/client';
 
 type SignedUrlResponse = {

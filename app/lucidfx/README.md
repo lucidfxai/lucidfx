@@ -1,3 +1,8 @@
+# Notes
+-------
+src/** is the client
+server/ is the server
+
 # System dev dependencies:
 --------------------------
 - Docker Desktop

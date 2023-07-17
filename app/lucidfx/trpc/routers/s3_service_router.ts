@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { S3Service } from '../../../server/services/s3_service';
+import { S3Service } from '../../server/services/s3_service';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 const s3Service = new S3Service();
