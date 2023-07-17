@@ -1,9 +1,8 @@
 // integration_tests/pages/api/webhooks/clerk.integration.test.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { WebhookVerificationError } from 'svix';
-import handler from '../../../../src/pages/api/webhooks/clerk';
-import { deleteUser, insertUser } from '../../../../server/db/schema/users';
-import clerk from '@clerk/clerk-sdk-node';
+import handler from '../../../../../src/pages/api/webhooks/clerk';
+import { deleteUser, insertUser } from '../../../../../server/db/schema/users';
 import 'dotenv/config';
 
 
@@ -23,7 +22,7 @@ jest.mock('svix', () => ({
   WebhookVerificationError: jest.requireActual('svix').WebhookVerificationError,
 }));
 
-jest.mock('../../../../server/db/schema/users', () => ({
+jest.mock('../../../../../server/db/schema/users', () => ({
   insertUser: jest.fn(),
   deleteUser: jest.fn(),
   fetchUsers: jest.fn(),
