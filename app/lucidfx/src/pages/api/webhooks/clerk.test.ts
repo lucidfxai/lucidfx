@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import clerkHandler from '../../../server/handlers/clerk_handler';
+import clerkHandler from '../../../../server/handlers/clerk_handler';
 import handler from '../../../pages/api/webhooks/clerk';
 
-jest.mock('../../../server/handlers/clerk_handler', () => jest.fn());
+jest.mock('../../../../server/handlers/clerk_handler', () => jest.fn());
 
 describe('API Routes: clerk', () => {
   it('calls clerkHandler correctly', async () => {

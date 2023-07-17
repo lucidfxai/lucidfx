@@ -1,5 +1,5 @@
-import { runMigrations } from '../src/server/db/migration';
-import { initializeSingleConnectionDb } from '../src/server/db/connection';
+import { runMigrations } from '../server/db/migration';
+import { initializeSingleConnectionDb } from '../server/db/connection';
 
 async function migrateDatabase() {
   const singleConnectionDb = await initializeSingleConnectionDb();

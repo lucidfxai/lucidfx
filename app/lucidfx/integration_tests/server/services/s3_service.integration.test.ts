@@ -1,4 +1,4 @@
-import { S3Service } from '../../../src/server/services/s3_service'; 
+import { S3Service } from '../../../server/services/s3_service'; 
 import AWS from 'aws-sdk';
 
 describe('S3Service Integration Test', () => {

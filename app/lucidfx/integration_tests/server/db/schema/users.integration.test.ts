@@ -1,8 +1,8 @@
 // integrationTests/userModel.test.ts
 
 import { ResultSetHeader } from 'mysql2';
-import { endDb } from '../../../../src/server/db/connection';
-import { insertUser, fetchUsers, NewUser, User, deleteUser } from '../../../../src/server/db/schema/users'
+import { endDb } from '../../../../server/db/connection';
+import { insertUser, fetchUsers, NewUser, User, deleteUser } from '../../../../server/db/schema/users'
 
 describe('User model integration tests', () => {
   let newUser: NewUser;
