@@ -9,7 +9,7 @@ describe('User model integration tests', () => {
 
   beforeAll(() => {
     newUser = {
-      user_id: 'test-user',
+      user_id: 'test-user-integration',
     };
   });
 
