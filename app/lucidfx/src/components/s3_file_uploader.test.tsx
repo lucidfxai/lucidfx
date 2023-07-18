@@ -55,7 +55,7 @@ global.fetch = jest.fn(() =>
 );
 
 describe('FileUploader', () => {
-  it('uploads a file when selected', async () => {
+  it('uploads a file when selected & saves to files db table', async () => {
     const MOCK_FILE = new File(['hello'], 'hello.png', { type: 'image/png' });
 
     render(<FileUploader onUploadError={(error: TRPCClientErrorLike<any>): void => {

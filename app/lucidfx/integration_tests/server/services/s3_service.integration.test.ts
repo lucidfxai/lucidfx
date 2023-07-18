@@ -1,5 +1,7 @@
 import { S3Service } from '../../../server/services/s3_service'; 
+import { getFilesByUserId } from '../../../server/db/schema/files';
 import AWS from 'aws-sdk';
+import { NewUser, insertUser } from '../../../server/db/schema/users';
 
 describe('S3Service Integration Test', () => {
   let s3Service: S3Service;
@@ -54,5 +56,26 @@ describe('S3Service Integration Test', () => {
     await s3.deleteObject({ Bucket: params.Bucket, Key: uniqueKey }).promise();
   });
 
+  it('should add file to files table correctly', async () => {
+    const userId = 'test_userId_s3_service_integration_test';
+    const uniqueKey = 'file_key';
+
+    // Insert the user before adding the file
+    const newUser: NewUser = {
+        user_id: userId,
+    };
+    await insertUser(newUser);
+
+    const response = await s3Service.addFileToFilesTableDbPromise(userId, uniqueKey);
+
+    expect(response).toBe('added file to files table in db successfully');
+
+    const files = await getFilesByUserId(userId);
+    const file = files.find((file: any) => file.unique_key === uniqueKey);
+
+    expect(file).toBeDefined();
+
+    s3Service.removeFileFromFilesTableDbPromise(userId, uniqueKey);
+  });
 });
 

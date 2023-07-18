@@ -1,9 +1,14 @@
 import { S3Service } from './s3_service';
+import { insertFile } from '../db/schema/files';
 
 jest.mock('aws-sdk', () => ({
   S3: jest.fn().mockImplementation(() => ({
     getSignedUrlPromise: jest.fn().mockImplementation(() => Promise.resolve('https://mocksignedurl.com')),
   })),
+}));
+
+jest.mock('../db/schema/files', () => ({
+  insertFile: jest.fn().mockImplementation(() => Promise.resolve({ insertId: 1 })),
 }));
 
 describe('S3Service', () => {
@@ -36,7 +41,7 @@ describe('S3Service', () => {
     }));
   });
 
-  it('should call getDownloadLink correctly', async () => {
+  it('should call getSignedGetUrlPromise correctly (which is a download link)', async () => {
     const mockUrl = 'https://mocksignedurl.com';
 
     // Mock the getSignedUrlPromise method for 'getObject' operation
@@ -61,5 +66,20 @@ describe('S3Service', () => {
     });
   });
 
+  it('should call addFileToFilesTableDbPromise correctly', async () => {
+    const mockUserId = 'test_user';
+    const mockUniqueKey = 'file_key';
+
+    const response = await s3Service.addFileToFilesTableDbPromise(mockUserId, mockUniqueKey);
+
+    expect(response).toEqual('added file to files table in db successfully');
+
+    // Verify the insertFile method was called with correct parameters
+    expect(insertFile).toBeCalledWith({
+      user_id: mockUserId,
+      unique_key: mockUniqueKey,
+      uploaded_at: expect.any(String),
+    });
+  });
 });
 

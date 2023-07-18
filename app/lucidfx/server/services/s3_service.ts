@@ -1,6 +1,7 @@
 import { S3 } from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid';
 import 'dotenv/config';
+import { NewFile, deleteFile, insertFile } from '../db/schema/files';
 
 export class S3Service {
   private s3: S3;
@@ -48,11 +49,20 @@ export class S3Service {
 
   public async addFileToFilesTableDbPromise(userId: string, uniqueKey: string): Promise<string> {
     console.log('addFileToFilesTableDbPromise', userId, uniqueKey);
-    const returnval = 'added successfully';
-    return returnval;
+    const file: NewFile = {
+      user_id: userId,
+      unique_key: uniqueKey,
+      uploaded_at: new Date().toISOString(),
+    };
+    insertFile(file);
+    return 'added file to files table in db successfully';
   }
 
+  public async removeFileFromFilesTableDbPromise(userId: string, uniqueKey: string): Promise<string> {
+    console.log('removeFileToFilesTableDbPromise', userId, uniqueKey);
+    deleteFile(uniqueKey);
+    return 'deleted file from files table in db successfully';
+  }
 }
 
 export const s3Service = new S3Service();
-

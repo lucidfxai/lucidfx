@@ -7,7 +7,7 @@ import { users } from './users';
 export const files = mysqlTable('files', {
   id: serial('id').primaryKey(),
   user_id: varchar('user_id', { length: 256 }).references(() => users.user_id),
-  file_key: varchar('file_key', { length: 256 }),
+  unique_key: varchar('unique_key', { length: 256 }),
   uploaded_at: varchar('uploaded_at', { length: 256 })
 }, (users) => ({
   nameIdx: index('name_idx').on(users.user_id),
@@ -21,12 +21,12 @@ export async function insertFile(file: NewFile): Promise<MySqlRawQueryResult> {
   return await db.insert(files).values(file);
 }
 
-export async function deleteFile(fileKey: string): Promise<MySqlRawQueryResult> {
+export async function deleteFile(uniqueKey: string): Promise<MySqlRawQueryResult> {
   const db = getDb();
-  return await db.delete(files).where(eq(files.file_key, fileKey));
+  return await db.delete(files).where(eq(files.unique_key, uniqueKey));
 }
 
-export async function fetchAllFilesForCurrentUserSession(user_id: string): Promise<File[]> {
+export async function getFilesByUserId(user_id: string): Promise<File[]> {
   const db = getDb();
   return await db.select().from(files).where(eq(files.user_id, user_id));
 }
