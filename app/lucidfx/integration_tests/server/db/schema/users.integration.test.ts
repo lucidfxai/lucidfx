@@ -1,5 +1,3 @@
-// integrationTests/userModel.test.ts
-
 import { ResultSetHeader } from 'mysql2';
 import { endDb } from '../../../../server/db/connection';
 import { insertUser, fetchUsers, NewUser, User, deleteUser } from '../../../../server/db/schema/users'
@@ -7,14 +5,23 @@ import { insertUser, fetchUsers, NewUser, User, deleteUser } from '../../../../s
 describe('User model integration tests', () => {
   let newUser: NewUser;
 
-  beforeAll(() => {
+  beforeEach(async () => {
     newUser = {
       user_id: 'test-user-integration',
     };
+
+    // Insert new user before each test
+    await insertUser(newUser);
+  });
+
+  afterEach(async () => {
+    // Clean up after each test
+    if (typeof newUser.user_id === 'string') {
+      await deleteUser(newUser.user_id).catch((error) => console.error(error));
+    }
   });
 
   test('inserts a new user into the database', async () => {
-    await insertUser(newUser);
     const users: User[] = await fetchUsers();
     const userExists = users.some(user => user.user_id === newUser.user_id);
     expect(userExists).toBe(true);
@@ -39,6 +46,9 @@ describe('User model integration tests', () => {
   });
 
   test('verifies the user is deleted from the database', async () => {
+    if (typeof newUser.user_id === 'string') {
+      await deleteUser(newUser.user_id);
+    }
     const users: User[] = await fetchUsers();
     const userExists = users.some(user => user.user_id === newUser.user_id);
     expect(userExists).toBe(false);

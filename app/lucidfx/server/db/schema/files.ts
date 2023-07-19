@@ -31,4 +31,10 @@ export async function getFilesByUserId(user_id: string): Promise<File[]> {
   return await db.select().from(files).where(eq(files.user_id, user_id));
 }
 
+export async function deleteAllFilesByUserId(user_id: string): Promise<MySqlRawQueryResult> {
+  const db = getDb();
+  return await db.delete(files)
+    .where(eq(files.user_id, user_id));
+}
+
 

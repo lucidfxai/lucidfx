@@ -1,7 +1,13 @@
 import { insertUser, fetchUsers, users, NewUser, deleteUser } from '../schema/users';
 import getDb from '../connection';
+import { deleteAllFilesByUserId } from '../schema/files';
 
 jest.mock('../connection');
+
+jest.mock('../schema/files', () => ({
+  ...jest.requireActual('../schema/files'),
+  deleteAllFilesByUserId: jest.fn(),
+}));
 
 describe('schema users.ts tests', () => {
   type MockDb = {
@@ -42,8 +48,12 @@ describe('schema users.ts tests', () => {
   it('should delete user correctly', async () => {
     const id = 'test_user';
 
+    // Mock successful deletion of all files
+    (deleteAllFilesByUserId as jest.Mock).mockResolvedValue(true);
+
     await deleteUser(id);
 
+    expect(deleteAllFilesByUserId).toHaveBeenCalledWith(id);
     expect(mockDb.delete).toHaveBeenCalledWith(users);
     expect(mockDb.where).toHaveBeenCalledWith(expect.anything()); // first, ensure `where` was called
     expect(mockDb.where).toHaveBeenCalledWith(expect.objectContaining({
@@ -53,6 +63,22 @@ describe('schema users.ts tests', () => {
         }),
       ]),
     }));
+  });
+
+  it('should throw an error if file deletion fails', async () => {
+    const id = 'test_user';
+
+    // Mock unsuccessful deletion of files
+    const errorMessage = 'Error deleting files';
+    (deleteAllFilesByUserId as jest.Mock).mockRejectedValue(new Error(errorMessage));
+
+    try {
+      await deleteUser(id);
+      fail('deleteUser should have thrown an error');
+    } catch (error) {
+      expect(deleteAllFilesByUserId).toHaveBeenCalledWith(id);
+      expect(error).toEqual(new Error(`Error deleting user with id ${id}: Error: ${errorMessage}`));
+    }
   });
 
   it('should fetch users correctly', async () => {
