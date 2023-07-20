@@ -3,6 +3,7 @@ import { index, mysqlTable, serial, varchar } from 'drizzle-orm/mysql-core';
 import getDb from '../connection';
 import { MySqlRawQueryResult } from 'drizzle-orm/mysql2';
 import { deleteAllFilesByUserId } from './files';
+import clerk from '@clerk/clerk-sdk-node';
  
 export const users = mysqlTable('users', {
   id: serial('id').primaryKey(),
@@ -22,6 +23,7 @@ export async function insertUser(user: NewUser): Promise<MySqlRawQueryResult> {
 export async function deleteUser(id: string): Promise<MySqlRawQueryResult> {
   const db = getDb();
   try {
+    await clerk.users.deleteUser(id);
     await deleteAllFilesByUserId(id);
     return await db.delete(users).where(eq(users.user_id, id));
   } catch (error) {
