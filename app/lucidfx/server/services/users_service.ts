@@ -17,6 +17,14 @@ export class UsersService {
     return await db.insert(users).values(user);
   }
 
+  // deleteUser 
+  //  - delete user in clerk
+  //  - delete all files in s3
+  //  - delete user in database
+  //  
+  //  Have proper error handling here and assert against all possible errors
+
+  //private 
   async deleteUserInDbAndClerk(id: string): Promise<MySqlRawQueryResult> {
     const db = getDb();
     try {
@@ -29,7 +37,8 @@ export class UsersService {
     }
   }
 
-  async deleteUserInDatabaseAfterManualDeletionInClerkWebUi(id: string): Promise<MySqlRawQueryResult> {
+  //private 
+  async deleteUserInDatabase(id: string): Promise<MySqlRawQueryResult> {
     const db = getDb();
     try {
       await this.filesService.deleteAllFilesByUserId(id);

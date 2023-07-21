@@ -56,7 +56,7 @@ describe('FilesService integration tests', () => {
 
   afterEach(async () => {
     await filesService.deleteAllFilesByUserId(newUser.user_id!);
-    await usersService.deleteUserInDatabaseAfterManualDeletionInClerkWebUi(newUser.user_id!);
+    await usersService.deleteUserInDatabase(newUser.user_id!);
   });
 
   test('inserts a new file into the database', async () => {

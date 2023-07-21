@@ -67,7 +67,7 @@ describe('UsersService tests', () => {
 
   it('should delete user from handler event after manual deletion in clerk web UI correctly', async () => {
     const id = 'test_user';
-    await usersService.deleteUserInDatabaseAfterManualDeletionInClerkWebUi(id);
+    await usersService.deleteUserInDatabase(id);
 
     expect(filesService.deleteAllFilesByUserId).toHaveBeenCalledWith(id);
     expect(mockDb.delete).toHaveBeenCalledWith(users);

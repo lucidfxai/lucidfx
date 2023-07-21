@@ -19,7 +19,7 @@ jest.mock('../services/services_index', () => ({
   usersService: {
     insertUser: jest.fn(),
     deleteUser: jest.fn(),
-    deleteUserInDatabaseAfterManualDeletionInClerkWebUi: jest.fn(),  // Mock the method
+    deleteUserInDatabase: jest.fn(),  // Mock the method
     fetchUsers: jest.fn(),
   }
 }));
@@ -85,7 +85,7 @@ describe('Clerk Webhook Tests', () => {
   it('should call deleteUser on "user.deleted" event', async () => {
     req.body.type = 'user.deleted';
     await handler(req as NextApiRequest, res as NextApiResponse);
-    expect(usersService.deleteUserInDatabaseAfterManualDeletionInClerkWebUi).toHaveBeenCalledWith('test_id');
+    expect(usersService.deleteUserInDatabase).toHaveBeenCalledWith('test_id');
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
   });
