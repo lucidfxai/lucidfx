@@ -1,9 +1,14 @@
 import { S3Service } from './s3_service';
-import { insertFile } from '../db/schema/files';
+import { FilesService } from './files_service';
+
+const s3Service = new S3Service();
+const filesService = new FilesService(s3Service);
+const mockDeleteObjectPromise = jest.fn().mockResolvedValue({});
 
 jest.mock('aws-sdk', () => ({
   S3: jest.fn().mockImplementation(() => ({
     getSignedUrlPromise: jest.fn().mockImplementation(() => Promise.resolve('https://mocksignedurl.com')),
+    deleteObject: jest.fn().mockImplementation(() => ({ promise: mockDeleteObjectPromise })),
   })),
 }));
 
@@ -14,11 +19,13 @@ jest.mock('../db/schema/files', () => ({
 describe('S3Service', () => {
   let s3Service: S3Service;
   let mockGetSignedUrlPromise: jest.Mock;
+  let mockDeleteObject: jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
     s3Service = new S3Service();
     mockGetSignedUrlPromise = (s3Service.getS3Instance() as any).getSignedUrlPromise;
+    mockDeleteObject = (s3Service.getS3Instance() as any).deleteObject;
   });
 
   it('should create an instance correctly', () => {
@@ -66,20 +73,12 @@ describe('S3Service', () => {
     });
   });
 
-  it('should call addFileToFilesTableDbPromise correctly', async () => {
-    const mockUserId = 'test_user';
-    const mockUniqueKey = 'file_key';
+  it('should call deleteObject correctly', async () => {
+    const mockKey = 'mock-file-key';
+    await s3Service.deleteObject(mockKey);
 
-    const response = await s3Service.addFileToFilesTableDbPromise(mockUserId, mockUniqueKey);
-
-    expect(response).toEqual('added file to files table in db successfully');
-
-    // Verify the insertFile method was called with correct parameters
-    expect(insertFile).toBeCalledWith({
-      user_id: mockUserId,
-      unique_key: mockUniqueKey,
-      uploaded_at: expect.any(String),
-    });
+    expect(mockDeleteObject).toHaveBeenCalled();
+    expect((s3Service.getS3Instance() as any).deleteObject).toHaveBeenCalledWith({ Bucket: expect.any(String), Key: mockKey });
   });
 });
 

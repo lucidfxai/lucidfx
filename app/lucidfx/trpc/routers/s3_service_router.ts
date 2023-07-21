@@ -1,8 +1,7 @@
 import { z } from 'zod';
-import { S3Service } from '../../server/services/s3_service';
 import { createTRPCRouter, protectedProcedure } from '../trpc';
+import { s3Service, filesService } from 'server/services/services_index';
 
-const s3Service = new S3Service();
 
 export const s3ServiceRouter = createTRPCRouter({
   getSignedPutUrlPromise: protectedProcedure
@@ -14,7 +13,7 @@ export const s3ServiceRouter = createTRPCRouter({
       z.string().nonempty('s3 uniqueKey is required'),
     )
     .mutation(async ({ ctx, input }) => {
-      return s3Service.addFileToFilesTableDbPromise(ctx.auth.userId, input);
+      return filesService.insertFileToFilesTablePromise(ctx.auth.userId, input);
     }),
   // getSignedGetUrlPromise: protectedProcedure
   //   .input(

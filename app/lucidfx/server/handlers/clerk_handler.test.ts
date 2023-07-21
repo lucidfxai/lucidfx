@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Webhook, WebhookVerificationError } from 'svix';
 import handler from './clerk_handler';
-import { insertUser, deleteUser, fetchUsers } from '../db/schema/users';
+import { usersService } from '../services/services_index';
 
 jest.mock('svix', () => ({
   Webhook: jest.fn().mockImplementation(() => ({
@@ -15,10 +15,13 @@ jest.mock('svix', () => ({
   WebhookVerificationError: jest.requireActual('svix').WebhookVerificationError,
 }));
 
-jest.mock('../db/schema/users', () => ({
-  insertUser: jest.fn(),
-  deleteUser: jest.fn(),
-  fetchUsers: jest.fn(),
+jest.mock('../services/services_index', () => ({
+  usersService: {
+    insertUser: jest.fn(),
+    deleteUser: jest.fn(),
+    deleteUserInDatabaseAfterManualDeletionInClerkWebUi: jest.fn(),  // Mock the method
+    fetchUsers: jest.fn(),
+  }
 }));
 
 describe('Clerk Webhook Tests', () => {
@@ -71,10 +74,10 @@ describe('Clerk Webhook Tests', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Invalid webhook signature' });
   });
 
-  it('should call insertUser on "user.created" event', async () => {
+    it('should call insertUser on "user.created" event', async () => {
     req.body.type = 'user.created';
     await handler(req as NextApiRequest, res as NextApiResponse);
-    expect(insertUser).toHaveBeenCalledWith({ user_id: 'test_id' });
+    expect(usersService.insertUser).toHaveBeenCalledWith({ user_id: 'test_id' });
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
   });
@@ -82,20 +85,20 @@ describe('Clerk Webhook Tests', () => {
   it('should call deleteUser on "user.deleted" event', async () => {
     req.body.type = 'user.deleted';
     await handler(req as NextApiRequest, res as NextApiResponse);
-    expect(deleteUser).toHaveBeenCalledWith('test_id');
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
-  });
-
-  it('should respond with 200 if webhook is verified and event is valid', async () => {
-    await handler(req as NextApiRequest, res as NextApiResponse);
+    expect(usersService.deleteUserInDatabaseAfterManualDeletionInClerkWebUi).toHaveBeenCalledWith('test_id');
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
   });
 
   it('should call fetchUsers after processing event', async () => {
     await handler(req as NextApiRequest, res as NextApiResponse);
-    expect(fetchUsers).toHaveBeenCalled();
+    expect(usersService.fetchUsers).toHaveBeenCalled();
+  });
+
+  it('should respond with 200 if webhook is verified and event is valid', async () => {
+    await handler(req as NextApiRequest, res as NextApiResponse);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
   });
 
   it('should handle unexpected errors gracefully', async () => {

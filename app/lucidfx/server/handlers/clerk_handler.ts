@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Webhook, WebhookVerificationError } from 'svix';
-import { NewUser, deleteUser, fetchUsers, insertUser } from '../db/schema/users';
+import { NewUser } from '../db/schema/users';
+import { usersService } from '../services/services_index';
 
 export default async function clerkHandler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -46,13 +47,13 @@ export default async function clerkHandler(req: NextApiRequest, res: NextApiResp
         const newUser: NewUser = {
           user_id: verifiedEvent.data.id
         }
-        await insertUser(newUser);
+        await usersService.insertUser(newUser);
         break;
       case 'user.deleted':
-        await deleteUser(verifiedEvent.data.id);
+        await usersService.deleteUserInDatabaseAfterManualDeletionInClerkWebUi(verifiedEvent.data.id);
         break;
     }
   }
   res.status(200).json({ message: 'Event received' });
-  console.log('all users', await fetchUsers());
+  console.log('all users', await usersService.fetchUsers());
 }

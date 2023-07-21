@@ -1,7 +1,6 @@
-import { S3 } from 'aws-sdk';
+import AWS, { S3 } from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid';
 import 'dotenv/config';
-import { NewFile, deleteFile, insertFile } from '../db/schema/files';
 
 export class S3Service {
   private s3: S3;
@@ -30,38 +29,29 @@ export class S3Service {
     return { url, uniqueKey };
   }
 
-
-  private async generateUniqueKey(): Promise<string> {
+  async generateUniqueKey(): Promise<string> {
     const uuid = uuidv4();
     const uniqueKey = `uuid-${uuid}-date-${Date.now()}`;
     return uniqueKey;
   }
 
-  public async getSignedGetUrlPromise(s3Key: string): Promise<string> {
+  public async getSignedGetUrlPromise(uniqueKey: string): Promise<string> {
     const operation = 'getObject';
     const parameters = {
       Bucket: process.env.AWS_BUCKET_NAME || 'lucidfx-dev',
-      Key: s3Key,
+      Key: uniqueKey,
       Expires: 60 * 5, // the URL will be valid for 5 minutes
     };
     return this.s3.getSignedUrlPromise(operation, parameters);
   }
 
-  public async addFileToFilesTableDbPromise(userId: string, uniqueKey: string): Promise<string> {
-    console.log('addFileToFilesTableDbPromise', userId, uniqueKey);
-    const file: NewFile = {
-      user_id: userId,
-      unique_key: uniqueKey,
-      uploaded_at: new Date().toISOString(),
+  public async deleteObject(uniqueKey: string): Promise<AWS.S3.DeleteObjectOutput> {
+    const params = {
+      Bucket: process.env.AWS_BUCKET_NAME as string,
+      Key: uniqueKey,
+      Expires: 60
     };
-    insertFile(file);
-    return 'added file to files table in db successfully';
-  }
-
-  public async removeFileFromFilesTableDbPromise(userId: string, uniqueKey: string): Promise<string> {
-    console.log('removeFileToFilesTableDbPromise', userId, uniqueKey);
-    deleteFile(uniqueKey);
-    return 'deleted file from files table in db successfully';
+    return await this.s3.deleteObject({ Bucket: params.Bucket, Key: params.Key }).promise();
   }
 }
 
