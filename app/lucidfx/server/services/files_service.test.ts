@@ -57,17 +57,17 @@ describe('FilesService', () => {
     expect(mockDb.where).toHaveBeenCalledWith(eq(files.unique_key, uniqueKey));
   });
 
-    it('should delete all files by user id correctly', async () => {
+  it('should delete all files by user id correctly', async () => {
     const userId = 'test_user';
     // Assuming getFilesByUserId returns the following data
     const userFiles = [
-      { 
+      {
         unique_key: 'unique_key1',
         id: 1,
         user_id: userId,
         uploaded_at: new Date().toISOString()
       },
-      { 
+      {
         unique_key: 'unique_key2',
         id: 2,
         user_id: userId,
@@ -81,7 +81,6 @@ describe('FilesService', () => {
     userFiles.forEach((file) => {
       expect(mockS3Service.deleteObject).toHaveBeenCalledWith(file.unique_key);
       expect(mockDb.delete).toHaveBeenCalledWith(files);
-      expect(mockDb.where).toHaveBeenCalledWith(eq(files.unique_key, file.unique_key));
     });
     expect(mockDb.delete).toHaveBeenCalledWith(files);
     expect(mockDb.where).toHaveBeenCalledWith(eq(files.user_id, userId));

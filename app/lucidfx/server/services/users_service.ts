@@ -4,6 +4,7 @@ import { NewUser, User, users } from "../db/schema/users";
 import { MySqlRawQueryResult } from "drizzle-orm/mysql2";
 import clerk from '@clerk/clerk-sdk-node';
 import { eq } from "drizzle-orm";
+import { S3Service } from "./s3_service";
 
 export class UsersService {
   private filesService: FilesService;
@@ -17,18 +18,13 @@ export class UsersService {
     return await db.insert(users).values(user);
   }
 
-  // deleteUser 
-  //  - delete user in clerk
-  //  - delete all files in s3
-  //  - delete user in database
-  //  
-  //  Have proper error handling here and assert against all possible errors
+  // add proper error handling
 
-  //private 
   async deleteUserInDbAndClerk(id: string): Promise<MySqlRawQueryResult> {
     const db = getDb();
     try {
       await clerk.users.deleteUser(id);
+      clerk.users.createUser({})
       await this.filesService.deleteAllFilesByUserId(id);
       return await db.delete(users).where(eq(users.user_id, id));
     } catch (error) {
@@ -49,9 +45,13 @@ export class UsersService {
     }
   }
 
+  async deleteUserInUsersTable(id: string): Promise<MySqlRawQueryResult> {
+    const db = getDb();
+    return await db.delete(users).where(eq(users.user_id, id));
+  }
+
   async fetchUsers(): Promise<User[]> {
     const db = getDb();
     return await db.select().from(users);
   }
 }
-

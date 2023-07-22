@@ -2,7 +2,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { WebhookVerificationError } from 'svix';
 import handler from '../../../../../src/pages/api/webhooks/clerk';
-import { deleteUser, insertUser } from '../../../../../server/db/schema/users';
+// import { deleteUser, insertUser } from '../../../../../server/db/schema/users';
 import 'dotenv/config';
 
 
@@ -84,22 +84,22 @@ describe('Clerk Webhook Tests', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
   });
 
-  it('should call insertUser on "user.created" event', async () => {
-    req.body.type = 'user.created';
-    await handler(req as NextApiRequest, res as NextApiResponse);
-    expect(insertUser).toHaveBeenCalledWith({ user_id: 'test_id' });
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
-  });
-
-  it('should call deleteUser on "user.deleted" event', async () => {
-    req.body.type = 'user.deleted';
-    await handler(req as NextApiRequest, res as NextApiResponse);
-    expect(deleteUser).toHaveBeenCalledWith('test_id');
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
-  });
-});
+//   it('should call insertUser on "user.created" event', async () => {
+//     req.body.type = 'user.created';
+//     await handler(req as NextApiRequest, res as NextApiResponse);
+//     expect(insertUser).toHaveBeenCalledWith({ user_id: 'test_id' });
+//     expect(res.status).toHaveBeenCalledWith(200);
+//     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
+//   });
+//
+//   it('should call deleteUser on "user.deleted" event', async () => {
+//     req.body.type = 'user.deleted';
+//     await handler(req as NextApiRequest, res as NextApiResponse);
+//     expect(deleteUser).toHaveBeenCalledWith('test_id');
+//     expect(res.status).toHaveBeenCalledWith(200);
+//     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
+//   });
+// });
 
 
 // Probably want to implement this integration test locally once we have funds

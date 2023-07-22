@@ -39,8 +39,8 @@ export class FilesService {
 
     for (const file of userFiles) {
       if (file.unique_key) {
+        // delete in s3
         await this.s3Service.deleteObject(file.unique_key);
-        await db.delete(files).where(eq(files.unique_key, file.unique_key));
       }
     }
     return await db.delete(files).where(eq(files.user_id, user_id));

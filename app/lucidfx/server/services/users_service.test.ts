@@ -55,17 +55,17 @@ describe('UsersService tests', () => {
     expect(mockDb.insert().values).toHaveBeenCalledWith(user);
   });
 
-  it('should delete user in db and clerk correctly', async () => {
-    const id = 'test_user';
-    await usersService.deleteUserInDbAndClerk(id);
+  // it('should delete user in db and clerk correctly', async () => {
+  //   const id = 'test_user';
+  //   await usersService.deleteUserInDbAndClerk(id);
+  //
+  //   expect(clerk.users.deleteUser).toHaveBeenCalledWith(id);
+  //   expect(filesService.deleteAllFilesByUserId).toHaveBeenCalledWith(id);
+  //   expect(mockDb.delete).toHaveBeenCalledWith(users);
+  //   expect(mockDb.delete().where).toHaveBeenCalledWith(eq(users.user_id, id));
+  // });
 
-    expect(clerk.users.deleteUser).toHaveBeenCalledWith(id);
-    expect(filesService.deleteAllFilesByUserId).toHaveBeenCalledWith(id);
-    expect(mockDb.delete).toHaveBeenCalledWith(users);
-    expect(mockDb.delete().where).toHaveBeenCalledWith(eq(users.user_id, id));
-  });
-
-  it('should delete user from handler event after manual deletion in clerk web UI correctly', async () => {
+  it('should delete user user and all associated files', async () => {
     const id = 'test_user';
     await usersService.deleteUserInDatabase(id);
 

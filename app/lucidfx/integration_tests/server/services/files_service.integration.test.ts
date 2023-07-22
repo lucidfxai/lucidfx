@@ -6,7 +6,6 @@ import { NewUser } from '../../../server/db/schema/users';
 import { ResultSetHeader } from 'mysql2';
 import { NewFile } from 'server/db/schema/files';
 
-
 type FileData = {
   id: number;
   user_id: string | null;
@@ -18,7 +17,6 @@ describe('FilesService integration tests', () => {
   let filesService: FilesService;
   let usersService: UsersService;
   let s3Service: S3Service;
-
 
   beforeAll(() => {
     s3Service = new S3Service();
@@ -51,7 +49,7 @@ describe('FilesService integration tests', () => {
       uploaded_at: new Date().toISOString(),
     };
 
-    await usersService.insertUser(newUser);
+    // await usersService.insertUser(newUser);
   });
 
   afterEach(async () => {
@@ -60,6 +58,7 @@ describe('FilesService integration tests', () => {
   });
 
   test('inserts a new file into the database', async () => {
+    await usersService.insertUser(newUser);
     await filesService.insertFileToFilesTablePromise(newUser.user_id!, newFile.unique_key!);
     const files: FileData[] = await filesService.getFilesByUserId(newUser.user_id!);
     const fileExists = files.some(file => file.unique_key === newFile.unique_key!);
@@ -67,6 +66,7 @@ describe('FilesService integration tests', () => {
   });
 
   test('fetches files from the database', async () => {
+    await usersService.insertUser(newUser);
     await filesService.insertFileToFilesTablePromise(newUser.user_id!, newFile.unique_key!);
     const files = await filesService.fetchFiles();
     expect(files).toBeDefined();
@@ -75,6 +75,7 @@ describe('FilesService integration tests', () => {
   });
 
   test('deletes a file from the database', async () => {
+    await usersService.insertUser(newUser);
     await filesService.insertFileToFilesTablePromise(newUser.user_id!, newFile.unique_key!);
     const files = await filesService.fetchFiles();
     const fileExists = files.some(file => file.unique_key === newFile.unique_key);
@@ -90,6 +91,7 @@ describe('FilesService integration tests', () => {
   });
 
   test('verifies the file is deleted from the database', async () => {
+    await usersService.insertUser(newUser);
     await filesService.insertFileToFilesTablePromise(newUser.user_id!, newFile.unique_key!);
     await filesService.deleteFile(newFile.unique_key!);
     const files = await filesService.getFilesByUserId(newUser.user_id!);
@@ -98,6 +100,7 @@ describe('FilesService integration tests', () => {
   });
 
   test('deletes and verifies deleted all files by user id from the database', async () => {
+    await usersService.insertUser(newUser);
     await filesService.insertFileToFilesTablePromise(newUser.user_id!, newFile.unique_key!);
     await filesService.insertFileToFilesTablePromise(newUser.user_id!, newFile2.unique_key!);
     const files: FileData[] = await filesService.getFilesByUserId(newUser.user_id!);
