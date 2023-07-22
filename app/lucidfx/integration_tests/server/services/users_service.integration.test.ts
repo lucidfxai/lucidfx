@@ -19,15 +19,15 @@ describe('users_service integration tests', () => {
     filesService = new FilesService(s3Service);
     usersService = new UsersService(filesService);
 
-    const userId = 'test-user-files-service-integration-test';
+    const userId = 'test-users_service-integration-test';
     newUser = {
       user_id: userId,
     };
-    const user2Id = 'test-user2-files-service-integration-test';
+    const user2Id = 'test-user2_files-service-integration-test';
     newUser2 = {
       user_id: user2Id,
     };
-    const user3Id = 'test-user3-files-service-integration-test';
+    const user3Id = 'test-user3_files-service-integration-test';
     newUser3 = {
       user_id: user3Id,
     };
@@ -40,6 +40,7 @@ describe('users_service integration tests', () => {
 
   afterEach(async () => {
     await usersService.deleteUserInDatabase(newUser.user_id!);
+    await usersService.deleteUserInDatabase(newUser2.user_id!);
     await usersService.deleteUserInDatabase(newUser2.user_id!);
   });
 

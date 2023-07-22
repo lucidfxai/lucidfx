@@ -36,7 +36,7 @@ describe('FilesService', () => {
     await filesService.insertFileToFilesTablePromise(userId, uniqueKey);
 
     expect(mockDb.insert).toHaveBeenCalledWith(files);
-    expect(mockDb.values).toHaveBeenCalled(); // Alternatively you can check the exact values passed
+    expect(mockDb.values).toHaveBeenCalled();
   });
 
   it('should get files by user id correctly', async () => {
@@ -59,7 +59,6 @@ describe('FilesService', () => {
 
   it('should delete all files by user id correctly', async () => {
     const userId = 'test_user';
-    // Assuming getFilesByUserId returns the following data
     const userFiles = [
       {
         unique_key: 'unique_key1',

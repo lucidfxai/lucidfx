@@ -1,8 +1,5 @@
 import { S3Service } from './s3_service';
-import { FilesService } from './files_service';
 
-const s3Service = new S3Service();
-const filesService = new FilesService(s3Service);
 const mockDeleteObjectPromise = jest.fn().mockResolvedValue({});
 
 jest.mock('aws-sdk', () => ({
@@ -10,10 +7,6 @@ jest.mock('aws-sdk', () => ({
     getSignedUrlPromise: jest.fn().mockImplementation(() => Promise.resolve('https://mocksignedurl.com')),
     deleteObject: jest.fn().mockImplementation(() => ({ promise: mockDeleteObjectPromise })),
   })),
-}));
-
-jest.mock('../db/schema/files', () => ({
-  insertFile: jest.fn().mockImplementation(() => Promise.resolve({ insertId: 1 })),
 }));
 
 describe('S3Service', () => {

@@ -4,7 +4,7 @@ import { NewUser, User, users } from "../db/schema/users";
 import { MySqlRawQueryResult } from "drizzle-orm/mysql2";
 import clerk from '@clerk/clerk-sdk-node';
 import { eq } from "drizzle-orm";
-import { S3Service } from "./s3_service";
+
 
 export class UsersService {
   private filesService: FilesService;

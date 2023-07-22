@@ -18,17 +18,15 @@ describe('FilesService integration tests', () => {
   let usersService: UsersService;
   let s3Service: S3Service;
 
-  beforeAll(() => {
-    s3Service = new S3Service();
-    filesService = new FilesService(s3Service);
-    usersService = new UsersService(filesService);
-  });
-
   let newUser: NewUser;
   let newFile: NewFile;
   let newFile2: NewFile;
 
-  beforeEach(async () => {
+  beforeAll(() => {
+    s3Service = new S3Service();
+    filesService = new FilesService(s3Service);
+    usersService = new UsersService(filesService);
+
     const userId = 'test-user-files-service-integration-test';
     const uniqueKey1 = 'test-file-unique-key-files-service-integration-test';
     const uniqueKey2 = 'test-file-unique-key-files-service-integration-test-2';
@@ -48,13 +46,14 @@ describe('FilesService integration tests', () => {
       unique_key: uniqueKey2,
       uploaded_at: new Date().toISOString(),
     };
+  });
 
-    // await usersService.insertUser(newUser);
+  beforeEach(async () => {
+    await filesService.deleteAllFilesByUserId(newUser.user_id!);
+    await usersService.deleteUserInDatabase(newUser.user_id!);
   });
 
   afterEach(async () => {
-    await filesService.deleteAllFilesByUserId(newUser.user_id!);
-    await usersService.deleteUserInDatabase(newUser.user_id!);
   });
 
   test('inserts a new file into the database', async () => {
