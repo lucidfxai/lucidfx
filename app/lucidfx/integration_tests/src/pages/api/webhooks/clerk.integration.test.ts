@@ -83,7 +83,7 @@ describe('Clerk Webhook Tests', () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
   });
-
+});
 //   it('should call insertUser on "user.created" event', async () => {
 //     req.body.type = 'user.created';
 //     await handler(req as NextApiRequest, res as NextApiResponse);

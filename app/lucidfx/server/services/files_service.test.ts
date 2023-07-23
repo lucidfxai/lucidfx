@@ -23,7 +23,7 @@ describe('FilesService', () => {
   beforeEach(() => {
     (getDb as jest.Mock).mockReturnValue(mockDb);
     mockS3Service = new S3Service() as jest.Mocked<S3Service>;
-    filesService = new FilesService(mockS3Service);
+    filesService = new FilesService();
   });
 
   afterEach(() => {
@@ -52,7 +52,6 @@ describe('FilesService', () => {
     const uniqueKey = 'unique_key';
     await filesService.deleteFile(uniqueKey);
 
-    expect(mockS3Service.deleteObject).toHaveBeenCalledWith(uniqueKey);
     expect(mockDb.delete).toHaveBeenCalledWith(files);
     expect(mockDb.where).toHaveBeenCalledWith(eq(files.unique_key, uniqueKey));
   });
@@ -77,10 +76,6 @@ describe('FilesService', () => {
 
     await filesService.deleteAllFilesByUserId(userId);
 
-    userFiles.forEach((file) => {
-      expect(mockS3Service.deleteObject).toHaveBeenCalledWith(file.unique_key);
-      expect(mockDb.delete).toHaveBeenCalledWith(files);
-    });
     expect(mockDb.delete).toHaveBeenCalledWith(files);
     expect(mockDb.where).toHaveBeenCalledWith(eq(files.user_id, userId));
   });

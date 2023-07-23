@@ -38,3 +38,14 @@ Staging env:
 
 
 
+
+Todo:
+-----
+Unsure unit/integrations covered for services.
+
+users_service.ts looking good.
+
+files_service.ts 
+
+s3_service.ts       
+

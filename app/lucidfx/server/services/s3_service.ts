@@ -1,6 +1,7 @@
 import AWS, { S3 } from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid';
 import 'dotenv/config';
+import { File } from '../db/schema/files';
 
 export class S3Service {
   private s3: S3;
@@ -52,6 +53,20 @@ export class S3Service {
       Expires: 60
     };
     return await this.s3.deleteObject({ Bucket: params.Bucket, Key: params.Key }).promise();
+  }
+
+  public async deleteMultipleObjects(files: File[]): Promise<string> {
+    try {
+      for (const file of files) {
+        if (file.unique_key) {
+          await this.deleteObject(file.unique_key);
+        }
+      }
+      return 'Files deleted from S3';
+    } catch (error) {
+      console.error(`Error deleting files from S3:`, error);
+      throw new Error(`Error deleting files from S3: ${error}`);
+    }
   }
 }
 

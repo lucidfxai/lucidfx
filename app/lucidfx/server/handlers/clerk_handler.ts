@@ -50,7 +50,7 @@ export default async function clerkHandler(req: NextApiRequest, res: NextApiResp
         await usersService.insertUser(newUser);
         break;
       case 'user.deleted':
-        await usersService.deleteUserInDatabase(verifiedEvent.data.id);
+        await usersService.deleteUserFromSystem(verifiedEvent.data.id);
         break;
     }
   }
