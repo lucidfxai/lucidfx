@@ -19,7 +19,7 @@ jest.mock('../services/services_index', () => ({
   usersService: {
     insertUser: jest.fn(),
     deleteUser: jest.fn(),
-    deleteUserFromSystem: jest.fn(),  // Mock the method
+    deleteUserFromSystem: jest.fn(),
     fetchUsers: jest.fn(),
   }
 }));

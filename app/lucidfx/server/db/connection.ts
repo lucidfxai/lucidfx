@@ -20,7 +20,7 @@ const connectionDetails = {
   user: myurl.username,
   password: myurl.password,
   database: myurl.pathname.split('/')[1],
-  ssl: { rejectUnauthorized: false },  // Depending on your settings, you may need to customize this SSL option
+  ssl: { rejectUnauthorized: false },
 };
 
 async function initializeDb() {

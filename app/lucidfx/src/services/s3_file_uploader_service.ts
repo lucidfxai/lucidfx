@@ -1,6 +1,4 @@
 export async function uploadFile(signedUrl: string, file: File) {
-    // Your logic to upload the file goes here
-    // You can use 'url' and 'file' here
     const options = {
       method: 'PUT',
       body: file,
@@ -11,7 +9,6 @@ export async function uploadFile(signedUrl: string, file: File) {
 
     try {
       const response = await fetch(signedUrl, options);
-      // console.log('response', response);
       if (response.status !== 200) {
         throw new Error(`Could not upload file: ${response.statusText}`);
       }

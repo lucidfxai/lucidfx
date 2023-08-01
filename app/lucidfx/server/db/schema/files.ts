@@ -12,4 +12,4 @@ export const files = mysqlTable('files', {
 }));
 
 export type File = InferModel<typeof files>;
-export type NewFile = InferModel<typeof files, 'insert'>; // insert type
+export type NewFile = InferModel<typeof files, 'insert'>;

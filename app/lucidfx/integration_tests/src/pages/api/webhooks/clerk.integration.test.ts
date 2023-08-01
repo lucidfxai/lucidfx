@@ -9,10 +9,9 @@ import { S3Service } from '../../../../../server/services/s3_service';
 import { UsersService } from '../../../../../server/services/users_service';
 
 
-// Add a test to make sure the webhook actually makes the call to our endpoint
+// ToDo Add a test to make sure the webhook actually makes the call to our endpoint
 // when a user is created.
 
-// In the test setup
 jest.mock('svix', () => ({
   Webhook: jest.fn().mockImplementation(() => ({
     verify: jest.fn((payload, headers) => {
