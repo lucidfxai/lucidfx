@@ -2,8 +2,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { WebhookVerificationError } from 'svix';
 import handler from '../../../../../src/pages/api/webhooks/clerk';
-// import { deleteUser, insertUser } from '../../../../../server/db/schema/users';
 import 'dotenv/config';
+import { FilesService } from '../../../../../server/services/files_service';
+import { ClerkService } from '../../../../../server/services/clerk_service';
+import { S3Service } from '../../../../../server/services/s3_service';
+import { UsersService } from '../../../../../server/services/users_service';
 
 
 // Add a test to make sure the webhook actually makes the call to our endpoint
@@ -22,22 +25,24 @@ jest.mock('svix', () => ({
   WebhookVerificationError: jest.requireActual('svix').WebhookVerificationError,
 }));
 
-jest.mock('../../../../../server/db/schema/users', () => ({
-  insertUser: jest.fn(),
-  deleteUser: jest.fn(),
-  fetchUsers: jest.fn(),
-}));
-
 describe('Clerk Webhook Tests', () => {
   let req: Partial<NextApiRequest>;
   let res: Partial<NextApiResponse>;
+  let usersService: UsersService;
+
+  beforeAll(() => {
+    const filesService = new FilesService();
+    const clerkService = new ClerkService();
+    const s3Service = new S3Service();
+    usersService = new UsersService(filesService, clerkService, s3Service); 
+  });
 
   beforeEach(() => {
     req = {
       method: 'POST',
       body: {
         type: 'user.created',
-        data: { id: 'test_id', object: 'test_object' },
+        data: { id: 'test_id_clerk_integration', object: 'test_object' },
       },
       headers: {
         "svix-id": 'test_id',
@@ -83,23 +88,39 @@ describe('Clerk Webhook Tests', () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
   });
+
+  it('should call insertUser on "user.created" event', async () => {
+    req.body.type = 'user.created';
+    const user = { user_id: 'test_id_clerk_integration' }; // the user you're testing
+    const userId = req.body.data.id;
+    await handler(req as NextApiRequest, res as NextApiResponse);
+    expect(await usersService.fetchUserById(userId)).toEqual(expect.objectContaining(user));
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
+    await usersService.deleteUserFromSystem(userId);
+  });
+
+
+  it('should call deleteUser on "user.deleted" event', async () => {
+    req.body.type = 'user.created';
+    const user = { user_id: 'test_id_clerk_integration' }; // the user you're testing
+    const userId = req.body.data.id;
+    await handler(req as NextApiRequest, res as NextApiResponse);
+    expect(await usersService.fetchUserById(userId)).toEqual(expect.objectContaining(user));
+
+    req.body.type = 'user.deleted';
+    await handler(req as NextApiRequest, res as NextApiResponse);
+    try {
+      const deletedUser = await usersService.fetchUserById(userId);
+      expect(deletedUser).not.toBeNull(); // This line should not be reached if the user was deleted
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error).toHaveProperty('message', `User not found with id ${userId}`);
+    }
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
+  });
 });
-//   it('should call insertUser on "user.created" event', async () => {
-//     req.body.type = 'user.created';
-//     await handler(req as NextApiRequest, res as NextApiResponse);
-//     expect(insertUser).toHaveBeenCalledWith({ user_id: 'test_id' });
-//     expect(res.status).toHaveBeenCalledWith(200);
-//     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
-//   });
-//
-//   it('should call deleteUser on "user.deleted" event', async () => {
-//     req.body.type = 'user.deleted';
-//     await handler(req as NextApiRequest, res as NextApiResponse);
-//     expect(deleteUser).toHaveBeenCalledWith('test_id');
-//     expect(res.status).toHaveBeenCalledWith(200);
-//     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
-//   });
-// });
 
 
 // Probably want to implement this integration test locally once we have funds

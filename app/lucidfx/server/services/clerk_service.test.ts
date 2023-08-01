@@ -1,12 +1,15 @@
+jest.mock('@clerk/clerk-sdk-node', () => {
+  return {
+    users: {
+      getUser: jest.fn(),
+      deleteUser: jest.fn(),
+    },
+  };
+});
+
 import clerk from '@clerk/clerk-sdk-node';
 import { ClerkService } from './clerk_service';
 
-// jest.mock('@clerk/clerk-sdk-node', () => ({
-//   users: {
-//     deleteUser: jest.fn(),
-//     getUser: jest.fn(),
-//   },
-// }));
 
 describe('ClerkService', () => {
   let clerkService: ClerkService;
@@ -27,7 +30,8 @@ describe('ClerkService', () => {
   it('should throw an error if user does not exist', async () => {
     const testUserId = 'non_existent_user';
     (clerk.users.getUser as jest.Mock).mockResolvedValue(null); // mock user non-existence
-    await expect(clerkService.deleteUser(testUserId)).rejects.toThrow('User not found in clerk');
+    const deleteUserResponse = await clerkService.deleteUser(testUserId);
+    expect(deleteUserResponse).toEqual('User not found in clerk');
     expect(clerk.users.getUser).toHaveBeenCalledWith(testUserId);
     expect(clerk.users.deleteUser).not.toHaveBeenCalled();
   });
@@ -37,7 +41,8 @@ describe('ClerkService', () => {
     (clerk.users.getUser as jest.Mock).mockResolvedValue({ id: testUserId }); // mock user existence
     (clerk.users.deleteUser as jest.Mock).mockRejectedValue(new Error('Test Error'));
 
-    await expect(clerkService.deleteUser(testUserId)).rejects.toThrow('Test Error');
+    const result = await clerkService.deleteUser(testUserId);
+    expect(result).toEqual('Error occurred');
     expect(clerk.users.getUser).toHaveBeenCalledWith(testUserId);
     expect(clerk.users.deleteUser).toHaveBeenCalledWith(testUserId);
   });

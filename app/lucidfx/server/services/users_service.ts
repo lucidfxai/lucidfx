@@ -29,43 +29,12 @@ export class UsersService {
   }
 
   public async deleteUserFromSystem(id: string): Promise<string> {
-    await this.deleteUserInClerk(id);
+    await this.clerkService.deleteUser(id);
     const files = await this.filesService.getFilesByUserId(id);
-    await this.deleteMultipleFilesInS3(files);
-    await this.deleteAllFilesByUserId(id);
+    await this.s3Service.deleteMultipleObjects(files);
+    await this.filesService.deleteAllFilesByUserId(id);
     await this.deleteUserFromUsers(id);
     return 'User deleted';
-  }
-
-  private async deleteUserInClerk(id: string): Promise<string> {
-    try {
-      // await clerk.users.deleteUser(id);
-      await this.clerkService.deleteUser(id);
-      return 'User deleted from clerk';
-    } catch (error) {
-      console.error(`Error deleting user from clerk with id ${id}:`, error);
-      throw new Error(`Error deleting user from clerk with id ${id}: ${error}`);
-    }
-  }
-
-  private async deleteMultipleFilesInS3(files: File[]): Promise<string> {
-    try {
-      await this.s3Service.deleteMultipleObjects(files);
-      return 'Files deleted from S3';
-    } catch (error) {
-      console.error(`Error deleting files from S3:`, error);
-      throw new Error(`Error deleting files from S3: ${error}`);
-    }
-  }
-
-  private async deleteAllFilesByUserId(id: string): Promise<string> {
-    try {
-      await this.filesService.deleteAllFilesByUserId(id);
-      return 'User deleted from files';
-    } catch (error) {
-      console.error(`Error deleting all files for user in files table with id ${id}:`, error);
-      throw new Error(`Error deleting all files for user in files table with id ${id}: ${error}`);
-    }
   }
 
   private async deleteUserFromUsers(id: string): Promise<string> {
@@ -78,7 +47,6 @@ export class UsersService {
     }
   }
 
-
   private async deleteUserInUsersTable(id: string): Promise<MySqlRawQueryResult> {
     const db = getDb();
     return await db.delete(users).where(eq(users.user_id, id));
@@ -87,5 +55,16 @@ export class UsersService {
   async fetchUsers(): Promise<User[]> {
     const db = getDb();
     return await db.select().from(users);
+  }
+
+  async fetchUserById(id: string): Promise<User> {
+    const db = getDb();
+    const usersWithId = await db.select().from(users).where(eq(users.user_id, id));
+      // If no user is found, return null
+    if (usersWithId.length === 0) {
+      throw new Error(`User not found with id ${id}`);
+    }
+    // Return the first user in the array
+    return usersWithId[0];
   }
 }

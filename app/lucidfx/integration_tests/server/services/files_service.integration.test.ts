@@ -4,7 +4,8 @@ import { FilesService } from '../../../server/services/files_service';
 import { S3Service } from '../../../server/services/s3_service';
 import { NewUser } from '../../../server/db/schema/users';
 import { ResultSetHeader } from 'mysql2';
-import { NewFile } from 'server/db/schema/files';
+import { NewFile } from '../../../server/db/schema/files';
+import { ClerkService } from '../../../server/services/clerk_service';
 
 type FileData = {
   id: number;
@@ -17,6 +18,7 @@ describe('FilesService integration tests', () => {
   let filesService: FilesService;
   let usersService: UsersService;
   let s3Service: S3Service;
+  let clerkService: ClerkService;
 
   let newUser: NewUser;
   let newFile: NewFile;
@@ -24,8 +26,9 @@ describe('FilesService integration tests', () => {
 
   beforeAll(() => {
     s3Service = new S3Service();
-    filesService = new FilesService(s3Service);
-    usersService = new UsersService(filesService);
+    filesService = new FilesService();
+    clerkService = new ClerkService();
+    usersService = new UsersService(filesService, clerkService, s3Service);
 
     const userId = 'test-user-files-service-integration-test';
     const uniqueKey1 = 'test-file-unique-key-files-service-integration-test';
@@ -50,7 +53,7 @@ describe('FilesService integration tests', () => {
 
   beforeEach(async () => {
     await filesService.deleteAllFilesByUserId(newUser.user_id!);
-    await usersService.deleteUserInDatabase(newUser.user_id!);
+    await usersService.deleteUserFromSystem(newUser.user_id!);
   });
 
   afterEach(async () => {

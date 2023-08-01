@@ -6,11 +6,12 @@ export class ClerkService {
   public async deleteUser(id: string): Promise<string> {
     try {
       const user = await clerk.users.getUser(id);
+      if(!user) return 'User not found in clerk';
       await clerk.users.deleteUser(id);
       return 'User deleted from clerk';
     } catch (error) {
-      new Error(`Error deleting user from clerk with id ${id}: ${error}`);
-      return 'User not found in clerk'
+      console.error(`Error deleting user from clerk with id ${id}: ${error}`);
+      return 'Error occurred';
     }
   }
 }

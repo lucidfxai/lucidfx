@@ -13,15 +13,9 @@ describe('UsersService integration tests', () => {
   let s3Service: S3Service;
 
   beforeAll(async () => {
-    // This would actually be a connection to your test database
-    // await setupDatabaseConnection();
-
-    // These would be the real instances, not mocks
-
     s3Service = new S3Service();
     filesService = new FilesService();
     clerkService = new ClerkService();
-
     usersService = new UsersService(filesService, clerkService, s3Service);
   });
 
@@ -31,15 +25,17 @@ describe('UsersService integration tests', () => {
   });
 
   it('should insert and delete user correctly', async () => {
-    const newUser = { id: 1, user_id: 'test_user' };
+    const newUser = { user_id: 'test_user_users_service_integration_test' };
     await usersService.insertUser(newUser);
-
     const users = await usersService.fetchUsers();
-    expect(users).toEqual(expect.arrayContaining([newUser]));
+    // We map the users to an array of user_id to perform the match
+    const userIds = users.map(user => user.user_id);
+    expect(userIds).toContain(newUser.user_id);
 
     await usersService.deleteUserFromSystem(newUser.user_id);
     const usersAfterDeletion = await usersService.fetchUsers();
-    expect(usersAfterDeletion).toEqual(expect.not.arrayContaining([newUser]));
+    const userIdsAfterDeletion = usersAfterDeletion.map(user => user.user_id);
+    expect(userIdsAfterDeletion).not.toContain(newUser.user_id);
   });
 
   // More tests...

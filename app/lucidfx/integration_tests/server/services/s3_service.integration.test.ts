@@ -14,7 +14,7 @@ describe('S3Service Integration Test', () => {
 
   beforeEach(() => {
     s3Service = new S3Service();
-    filesService = new FilesService(s3Service);
+    filesService = new FilesService();
   });
 
   it('should get signed URL correctly', async () => {
