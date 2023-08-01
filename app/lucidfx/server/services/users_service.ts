@@ -21,7 +21,7 @@ export class UsersService {
     this.s3Service = s3Service;
   }
 
-  async insertUser(user: NewUser): Promise<MySqlRawQueryResult> {
+  public async insertUser(user: NewUser): Promise<MySqlRawQueryResult> {
     const db = getDb();
     return await db.insert(users).values(user);
   }

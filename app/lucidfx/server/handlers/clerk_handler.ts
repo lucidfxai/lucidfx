@@ -27,7 +27,6 @@ export default async function clerkHandler(req: NextApiRequest, res: NextApiResp
 
   let verifiedEvent;
   try {
-    // Throws on error, returns the verified content on success
     wh.verify(JSON.stringify(event), headers);
     verifiedEvent = event;
   } catch (err) {
@@ -40,7 +39,6 @@ export default async function clerkHandler(req: NextApiRequest, res: NextApiResp
     }
   }
 
-  // Only execute if payload is verified
   if (verifiedEvent) {
     switch (verifiedEvent.type) {
       case 'user.created':
@@ -55,5 +53,4 @@ export default async function clerkHandler(req: NextApiRequest, res: NextApiResp
     }
   }
   res.status(200).json({ message: 'Event received' });
-  // console.log('all users', await usersService.fetchUsers());
 }
