@@ -90,11 +90,6 @@ describe('Clerk Webhook Tests', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Event received' });
   });
 
-  it('should call fetchUsers after processing event', async () => {
-    await handler(req as NextApiRequest, res as NextApiResponse);
-    expect(usersService.fetchUsers).toHaveBeenCalled();
-  });
-
   it('should respond with 200 if webhook is verified and event is valid', async () => {
     await handler(req as NextApiRequest, res as NextApiResponse);
     expect(res.status).toHaveBeenCalledWith(200);

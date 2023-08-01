@@ -77,22 +77,29 @@ describe('UsersService tests', () => {
     expect(mockDb.delete().where).toHaveBeenCalledWith(eq(users.user_id, id));
   });
 
-
-  // it('should deleteUsersInUsersTable correctly', async () => {
-  //   const id = 'test_user';
-  //   (mockDb.delete().where as jest.Mock).mockResolvedValue('User deleted from database');
-  //   const result = await usersService.deleteUserInUsersTable(id);
-  //
-  //   expect(result).toEqual('User deleted from database');
-  //   expect(mockDb.delete).toHaveBeenCalledWith(users);
-  //   expect(mockDb.delete().where).toHaveBeenCalledWith(eq(users.user_id, id));
-  // });
-
-
   it('should fetch users correctly', async () => {
     await usersService.fetchUsers();
     expect(mockDb.select).toHaveBeenCalled();
     expect(mockDb.select().from).toHaveBeenCalledWith(users);
+  });
+
+  describe('fetchUserById', () => {
+    it('should return a user when a user is found with given id', async () => {
+      const mockUser = { id: 'test_id', /* other user fields */ };
+      
+      // Mock the DB call
+      mockDb.select().from().where.mockResolvedValueOnce([mockUser]);
+      
+      const result = await usersService.fetchUserById('test_id');
+      expect(result).toEqual(mockUser);
+    });
+
+    it('should throw an error when no user is found with given id', async () => {
+      // Mock the DB call to return an empty array, indicating no user found
+      mockDb.select().from().where.mockResolvedValueOnce([]);
+      
+      await expect(usersService.fetchUserById('invalid_id')).rejects.toThrow('User not found with id invalid_id');
+    });
   });
 });
 

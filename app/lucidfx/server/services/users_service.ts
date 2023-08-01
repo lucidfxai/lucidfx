@@ -1,9 +1,7 @@
 import getDb from "../db/connection";
 import { FilesService } from "./files_service";
 import { NewUser, User, users } from "../db/schema/users";
-import { File } from "../db/schema/files";
 import { MySqlRawQueryResult } from "drizzle-orm/mysql2";
-import clerk from '@clerk/clerk-sdk-node';
 import { eq } from "drizzle-orm";
 import { ClerkService } from "./clerk_service";
 import { S3Service } from "./s3_service";
@@ -60,11 +58,9 @@ export class UsersService {
   async fetchUserById(id: string): Promise<User> {
     const db = getDb();
     const usersWithId = await db.select().from(users).where(eq(users.user_id, id));
-      // If no user is found, return null
     if (usersWithId.length === 0) {
       throw new Error(`User not found with id ${id}`);
     }
-    // Return the first user in the array
     return usersWithId[0];
   }
 }

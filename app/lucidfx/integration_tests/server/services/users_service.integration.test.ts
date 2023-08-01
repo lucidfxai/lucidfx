@@ -1,6 +1,3 @@
-import { endDb } from '../../../server/db/connection';
-import { NewUser, User } from '../../../server/db/schema/users'
-
 import { UsersService } from '../../../server/services/users_service';
 import { FilesService } from '../../../server/services/files_service';
 import { S3Service } from '../../../server/services/s3_service';
@@ -19,11 +16,6 @@ describe('UsersService integration tests', () => {
     usersService = new UsersService(filesService, clerkService, s3Service);
   });
 
-  afterAll(async () => {
-    // Clean up the database after tests
-    // await teardownDatabaseConnection();
-  });
-
   it('should insert and delete user correctly', async () => {
     const newUser = { user_id: 'test_user_users_service_integration_test' };
     await usersService.insertUser(newUser);
@@ -38,5 +30,32 @@ describe('UsersService integration tests', () => {
     expect(userIdsAfterDeletion).not.toContain(newUser.user_id);
   });
 
-  // More tests...
+  it('should fetch user by id correctly', async () => {                         
+    const newUser = { user_id: 'test_user_users_service_integration_test' };          
+    await usersService.insertUser(newUser);     
+
+    const fetchedUser = await usersService.fetchUserById(newUser.user_id);
+    expect(fetchedUser.user_id).toBe(newUser.user_id);                                     
+    
+    await usersService.deleteUserFromSystem(newUser.user_id);                         
+    
+    await expect(usersService.fetchUserById(newUser.user_id)).rejects.toThrow(`User not found with id ${newUser.user_id}`);                      
+  });
+
+  it('should fetch all users correctly', async () => {                         
+    const newUser1 = { user_id: 'test_user1_users_service_integration_test' };          
+    await usersService.insertUser(newUser1);  
+
+    const newUser2 = { user_id: 'test_user2_users_service_integration_test' };          
+    await usersService.insertUser(newUser2);
+
+    const fetchedUsers = await usersService.fetchUsers();
+    const userIds = fetchedUsers.map(user => user.user_id);
+    
+    expect(userIds).toContain(newUser1.user_id);
+    expect(userIds).toContain(newUser2.user_id);
+
+    await usersService.deleteUserFromSystem(newUser1.user_id); 
+    await usersService.deleteUserFromSystem(newUser2.user_id);                      
+  });
 });
