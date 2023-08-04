@@ -37,9 +37,9 @@ const Home: NextPage = () => {
               href="https://upload.io/"
               target="_blank"
             >
-              <h3 className="text-2xl font-bold">Upload.io→</h3>
+              <h3 className="text-2xl font-bold">Amazon S3 Bucket</h3>
               <div className="text-lg">
-                Upload.io is where we will upload our content to!
+                Upload your video to our S3 bucket.
               </div>
             </Link>
             <Link
