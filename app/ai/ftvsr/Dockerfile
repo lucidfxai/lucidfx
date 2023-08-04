@@ -21,7 +21,12 @@ RUN pip install \
     scikit-image==0.19.0 \
     lmdb==1.2.1 \
     yapf==0.31.0 \
-    tensorboard==2.6.0
+    tensorboard==2.6.0 \
+    flask
 
 # Set the working directory
 WORKDIR /workspace
+
+COPY ./api_server.py ./api_server.py
+
+CMD ["python3", "api_server.py"]
