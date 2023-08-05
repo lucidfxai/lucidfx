@@ -27,6 +27,6 @@ RUN pip install \
 # Set the working directory
 WORKDIR /workspace
 
-COPY ./api_server.py ./api_server.py
+COPY ./server /server
 
-CMD ["python3", "api_server.py"]
+CMD ["python3", "server/api_server.py"]
