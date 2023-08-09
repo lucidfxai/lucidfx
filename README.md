@@ -2,6 +2,7 @@
 
 Stack:
 ---
+<<<<<<< HEAD
 - Vercel (Edge using cloudflare)
 - Nextjs, TypeScript, Drizzle-ORM, tRPC, Tailwind CSS
 - Clerk auth
@@ -63,3 +64,8 @@ youtube shorts etc)
     - High engagement content (whisper voice ai to generate in your face captions).
     - Overlay generic high engagement content with your content.
     - Anything else I feel would have value.
+=======
+- Vercel
+- Nextjs, TypeScript, Drizzle-ORM, tRPC, Clerk, Tailwind CSS
+- PlanetScale
+>>>>>>> dev
