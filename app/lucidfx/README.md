@@ -1,15 +1,51 @@
-# Package manager used is pnpm so please use accordingly
+# Notes
+-------
+src/** is the client
+server/ is the server
 
-# Stack
-- [Next.js](https://nextjs.org)
-- [Clerk](https://clerk.com/)
-- [Drizzle-ORM](https://orm.drizzle.team/)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+# System dev dependencies:
+--------------------------
+- Docker Desktop
+- Docker Compose
+- pnpm
+- nvm
 
-## Learn More
-Notes https://www.youtube.com/watch?v=YkOSUVzOAA4&ab_channel=Theo-t3%E2%80%A4gg
+# Expose localhost to public domain (Useful for working with Auth/Clerk etc):
+-----------------------------------------------------------------------------
+Ngrok exposes localhost:3000 to a public domain.
 
-## How do I deploy this?
+# Scripts:
+----------
+dev
+ngrok
+build
+start
+lint
+docker:up
+docker:down
+generate:schema
+migrate
+test:unit
+test:integration
+test:integration-local
+test
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+Staging env:
+-----------
+- planetscale db
+- clerk env -> unit test if node-env = staging integration test real create user.
+
+
+
+
+Todo:
+-----
+Unsure unit/integrations covered for services.
+
+users_service.ts looking good.
+
+files_service.ts 
+
+s3_service.ts       
+
