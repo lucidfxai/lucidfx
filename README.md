@@ -14,8 +14,8 @@ FE:
 
 Backend:
 -------
-Nvidia docker containers,
-BasicVSR++
-Python
-Flask
-AWS S3
+- Nvidia docker containers
+- BasicVSR++
+- Python
+- Flask
+- AWS S3, EC2 on demand GPU instance.
